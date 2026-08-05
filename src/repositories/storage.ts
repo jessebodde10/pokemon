@@ -39,7 +39,7 @@ export function buildStorageKey(
   return `${sessionId}/${random}${extension}`;
 }
 
-const LOCAL_ROOT = path.join(process.cwd(), '.valtivo-storage');
+const LOCAL_ROOT = path.join(process.cwd(), '.pokora-storage');
 
 const CONTENT_TYPE_FILE = '.content-type';
 

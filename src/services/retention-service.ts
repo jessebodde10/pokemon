@@ -49,7 +49,7 @@ export async function deleteExpiredGuestAnalyses(
  */
 export function maintenanceToken(): string {
   return createHmac('sha256', serverConfig.security.rateLimitSalt)
-    .update('valtivo-ai:maintenance')
+    .update('pokora-ai:maintenance')
     .digest('hex');
 }
 

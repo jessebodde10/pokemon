@@ -21,8 +21,8 @@ export type AuthUser = {
   source: 'supabase' | 'dev-fallback';
 };
 
-export const DEV_SESSION_COOKIE = 'valtivo_dev_session';
-export const GUEST_TOKEN_COOKIE = 'valtivo_guest_token';
+export const DEV_SESSION_COOKIE = 'pokora_dev_session';
+export const GUEST_TOKEN_COOKIE = 'pokora_guest_token';
 const DEV_SESSION_MAX_AGE_SECONDS = 60 * 60 * 24 * 30;
 
 function sign(payload: string): string {

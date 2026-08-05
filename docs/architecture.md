@@ -2,7 +2,7 @@
 
 ## Uitgangspunt
 
-Valtivo AI doet één ding: van foto's naar een controleerbaar collectierapport. De
+Pokora AI doet één ding: van foto's naar een controleerbaar collectierapport. De
 architectuur is daaromheen gebouwd met twee harde regels:
 
 1. **Businesslogica staat nooit in een React-component.** Componenten renderen;
@@ -71,12 +71,12 @@ logcorrelatie of caching.
 
 ## Repository als adapter
 
-`ValtivoRepository` heeft twee implementaties. De keuze valt bij de eerste
+`PokoraRepository` heeft twee implementaties. De keuze valt bij de eerste
 aanroep van `getRepository()`:
 
 ```text
-Supabase URL + anon key + service-role key aanwezig  → SupabaseValtivoRepository
-anders                                               → InMemoryValtivoRepository
+Supabase URL + anon key + service-role key aanwezig  → SupabasePokoraRepository
+anders                                               → InMemoryPokoraRepository
 ```
 
 Dezelfde splitsing bestaat voor `FileStorage` (`SupabaseFileStorage` /

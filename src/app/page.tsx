@@ -65,7 +65,7 @@ const FAQ = [
   {
     question: 'Hoe nauwkeurig is de herkenning?',
     answer:
-      'Dat verschilt per foto. Valtivo AI toont bij iedere kaart een herkenningszekerheid en alternatieve matches. Niets wordt definitief opgeslagen voordat jij het hebt bevestigd of gecorrigeerd.',
+      'Dat verschilt per foto. Pokora AI toont bij iedere kaart een herkenningszekerheid en alternatieve matches. Niets wordt definitief opgeslagen voordat jij het hebt bevestigd of gecorrigeerd.',
   },
   {
     question: 'Krijg ik een exacte waarde van mijn kaarten?',
@@ -73,7 +73,7 @@ const FAQ = [
       'Nee. Je krijgt een geschatte bandbreedte met een lage, midden- en hoge schatting, inclusief de gebruikte prijsbron, de datum van de laatste update en het aantal prijswaarnemingen. Bij te weinig data tonen we geen bedrag.',
   },
   {
-    question: 'Kan Valtivo AI de conditie van mijn kaart beoordelen?',
+    question: 'Kan Pokora AI de conditie van mijn kaart beoordelen?',
     answer:
       'Niet betrouwbaar op basis van een binderfoto. De conditie blijft dan op "onbekend" staan. Voor een inschatting zijn minimaal een scherpe voor- en achterkantfoto bij neutraal licht nodig.',
   },

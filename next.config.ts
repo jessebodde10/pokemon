@@ -13,6 +13,14 @@ const supabaseHost = (() => {
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
+  experimental: {
+    // Server Actions cap request bodies at 1MB by default, which every phone
+    // photo exceeds - the upload would run to completion and only then be
+    // rejected. The browser downscales before uploading, so nothing should come
+    // close to this any more; it is a safety net matching the 10MB the upload
+    // validator already allows, plus room for multipart overhead.
+    serverActions: { bodySizeLimit: '12mb' },
+  },
   // Lets a second Next process (the e2e dev server) use its own build output
   // instead of clobbering the production build that `next start` is serving.
   distDir: process.env.NEXT_DIST_DIR || '.next',

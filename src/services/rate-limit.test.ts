@@ -8,14 +8,14 @@ import {
 } from './rate-limit';
 import { AppError } from '@/lib/errors/app-error';
 import {
-  InMemoryValtivoRepository,
+  InMemoryPokoraRepository,
   resetInMemoryStore,
 } from '@/repositories/in-memory-repository';
 import { getRepository, setRepository } from '@/repositories';
 
 beforeEach(() => {
   resetInMemoryStore();
-  setRepository(new InMemoryValtivoRepository());
+  setRepository(new InMemoryPokoraRepository());
 });
 
 /**

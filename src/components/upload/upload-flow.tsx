@@ -27,34 +27,22 @@ import {
   describePhotoQuality,
   type PhotoQualityVerdict,
 } from '@/features/analysis/quality';
+import {
+  prepareUpload,
+  type PreparedUpload,
+} from '@/lib/images/prepare-upload';
 
 type QueuedFile = {
   id: string;
+  /** The file the user picked. Kept for its name and original size. */
   file: File;
-  previewUrl: string;
-  status: 'ready' | 'uploading' | 'uploaded' | 'error';
+  /** Prepared payload; null until preparation finishes. */
+  prepared: PreparedUpload | null;
+  previewUrl: string | null;
+  status: 'preparing' | 'ready' | 'uploading' | 'uploaded' | 'error';
   message?: string;
   quality?: PhotoQualityVerdict;
 };
-
-/**
- * Reads pixel dimensions from the picked file without uploading it.
- *
- * Lets us judge a photo before the user spends an analysis attempt on it;
- * previously the same signals were only available server-side, once the
- * analysis had already started.
- */
-function readImageDimensions(
-  objectUrl: string,
-): Promise<{ width: number; height: number } | null> {
-  return new Promise((resolve) => {
-    const image = new Image();
-    image.onload = () =>
-      resolve({ width: image.naturalWidth, height: image.naturalHeight });
-    image.onerror = () => resolve(null);
-    image.src = objectUrl;
-  });
-}
 
 function validateFile(file: File): string | null {
   if (!isAcceptedMimeType(file.type)) {
@@ -77,7 +65,9 @@ export function UploadFlow({ maxImages }: { maxImages: number }) {
 
   React.useEffect(
     () => () => {
-      for (const entry of queue) URL.revokeObjectURL(entry.previewUrl);
+      for (const entry of queue) {
+        if (entry.previewUrl) URL.revokeObjectURL(entry.previewUrl);
+      }
     },
     // Revoking on unmount only; per-item cleanup happens in removeFile.
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -110,8 +100,9 @@ export function UploadFlow({ maxImages }: { maxImages: number }) {
           accepted.push({
             id: `${file.name}-${file.size}-${file.lastModified}-${Math.random().toString(36).slice(2, 8)}`,
             file,
-            previewUrl: URL.createObjectURL(file),
-            status: 'ready',
+            prepared: null,
+            previewUrl: null,
+            status: 'preparing',
           });
         }
 
@@ -122,22 +113,39 @@ export function UploadFlow({ maxImages }: { maxImages: number }) {
         }
         if (rejected.length > 0) setGlobalError(rejected.join(' '));
 
-        // Dimensions decode asynchronously; fill the verdict in afterwards so
-        // the thumbnail appears immediately.
+        // Decoding and re-encoding happen off the render path, so the tile
+        // shows up straight away and fills itself in.
         for (const entry of accepted) {
-          void readImageDimensions(entry.previewUrl).then((size) => {
-            if (!size) return;
-            const quality = describePhotoQuality({
-              width: size.width,
-              height: size.height,
-              byteSize: entry.file.size,
+          void prepareUpload(entry.file).then((prepared) => {
+            // Dimensions of the original, so shrinking the upload never turns
+            // a good photo into a "low resolution" warning.
+            const quality =
+              prepared.source.width > 0
+                ? describePhotoQuality({
+                    width: prepared.source.width,
+                    height: prepared.source.height,
+                    byteSize: prepared.source.byteSize,
+                  })
+                : undefined;
+
+            setQueue((items) => {
+              // The tile may have been removed while we were preparing it.
+              if (!items.some((item) => item.id === entry.id)) {
+                URL.revokeObjectURL(prepared.previewUrl);
+                return items;
+              }
+              return items.map((item) =>
+                item.id === entry.id
+                  ? {
+                      ...item,
+                      prepared,
+                      previewUrl: prepared.previewUrl,
+                      status: 'ready',
+                      ...(quality && quality.level !== 'ok' ? { quality } : {}),
+                    }
+                  : item,
+              );
             });
-            if (quality.level === 'ok') return;
-            setQueue((items) =>
-              items.map((item) =>
-                item.id === entry.id ? { ...item, quality } : item,
-              ),
-            );
           });
         }
 
@@ -150,7 +158,7 @@ export function UploadFlow({ maxImages }: { maxImages: number }) {
   const removeFile = React.useCallback((id: string) => {
     setQueue((current) => {
       const target = current.find((entry) => entry.id === id);
-      if (target) URL.revokeObjectURL(target.previewUrl);
+      if (target?.previewUrl) URL.revokeObjectURL(target.previewUrl);
       return current.filter((entry) => entry.id !== id);
     });
   }, []);
@@ -159,7 +167,19 @@ export function UploadFlow({ maxImages }: { maxImages: number }) {
     if (queue.length === 0 || isSubmitting) return;
     setIsSubmitting(true);
     setGlobalError(null);
+    try {
+      await submitQueue();
+    } catch {
+      // Whatever went wrong, the button has to come back. Leaving it spinning
+      // is the one outcome with no way out for the user.
+      setGlobalError(
+        'Er ging iets mis bij het starten van de analyse. Probeer het opnieuw.',
+      );
+      setIsSubmitting(false);
+    }
+  }
 
+  async function submitQueue() {
     const created = await createAnalysisSessionAction();
     if (!created.ok) {
       setGlobalError(created.message);
@@ -178,8 +198,24 @@ export function UploadFlow({ maxImages }: { maxImages: number }) {
 
       const formData = new FormData();
       formData.set('sessionId', sessionId);
-      formData.set('file', entry.file);
-      const result = await uploadImageAction(formData);
+      formData.set('file', entry.prepared?.file ?? entry.file);
+      if (entry.prepared?.downscaled) {
+        // The server scores quality on the photo as taken, not on the smaller
+        // copy we send it.
+        formData.set('sourceWidth', String(entry.prepared.source.width));
+        formData.set('sourceHeight', String(entry.prepared.source.height));
+        formData.set('sourceBytes', String(entry.prepared.source.byteSize));
+      }
+      // A server action can reject outright rather than return a result - a
+      // rejected transport (offline, a proxy dropping the body) never reaches
+      // the action's own error handling. Without this the loop would abort and
+      // leave the button spinning with no explanation.
+      const result = await uploadImageAction(formData).catch(() => ({
+        ok: false as const,
+        code: 'UPLOAD_FAILED',
+        message:
+          'Uploaden is onderbroken. Controleer je verbinding en probeer het opnieuw.',
+      }));
 
       setQueue((current) =>
         current.map((item) =>
@@ -218,6 +254,7 @@ export function UploadFlow({ maxImages }: { maxImages: number }) {
     (entry) => entry.status === 'uploaded',
   ).length;
   const flaggedCount = queue.filter((entry) => entry.quality).length;
+  const isPreparing = queue.some((entry) => entry.status === 'preparing');
 
   return (
     <div className="space-y-5">
@@ -325,13 +362,23 @@ export function UploadFlow({ maxImages }: { maxImages: number }) {
             {queue.map((entry) => (
               <li key={entry.id} className="panel-raised overflow-hidden p-0">
                 <div className="relative aspect-[4/3] bg-[var(--color-ink-800)]">
-                  {/* eslint-disable-next-line @next/next/no-img-element --
-                      Local object URL for a file the user just picked. */}
-                  <img
-                    src={entry.previewUrl}
-                    alt={`Voorbeeld van ${entry.file.name}`}
-                    className="h-full w-full object-cover"
-                  />
+                  {entry.previewUrl ? (
+                    /* eslint-disable-next-line @next/next/no-img-element --
+                       Local object URL for a file the user just picked. */
+                    <img
+                      src={entry.previewUrl}
+                      alt={`Voorbeeld van ${entry.file.name}`}
+                      className="h-full w-full object-cover"
+                    />
+                  ) : (
+                    <div className="grid h-full w-full place-items-center">
+                      <Loader2
+                        className="size-5 animate-spin text-[var(--text-muted)]"
+                        aria-hidden="true"
+                      />
+                      <span className="sr-only">Foto wordt voorbereid</span>
+                    </div>
+                  )}
                   {entry.status === 'uploading' ? (
                     <div className="absolute inset-0 grid place-items-center bg-black/60">
                       <Loader2
@@ -358,7 +405,16 @@ export function UploadFlow({ maxImages }: { maxImages: number }) {
                       {entry.file.name}
                     </p>
                     <p className="text-[11px] text-[var(--text-muted)]">
-                      {formatBytes(entry.file.size)}
+                      {entry.prepared?.downscaled ? (
+                        <>
+                          <span className="line-through">
+                            {formatBytes(entry.file.size)}
+                          </span>{' '}
+                          {formatBytes(entry.prepared.file.size)}
+                        </>
+                      ) : (
+                        formatBytes(entry.file.size)
+                      )}
                     </p>
                     {entry.message ? (
                       <p className="mt-1 text-[11px] text-[var(--color-critical)]">
@@ -417,12 +473,17 @@ export function UploadFlow({ maxImages }: { maxImages: number }) {
           type="button"
           size="lg"
           onClick={handleSubmit}
-          disabled={queue.length === 0 || isSubmitting}
+          disabled={queue.length === 0 || isSubmitting || isPreparing}
         >
           {isSubmitting ? (
             <>
               <Loader2 className="animate-spin" aria-hidden="true" />
               Bezig met uploaden…
+            </>
+          ) : isPreparing ? (
+            <>
+              <Loader2 className="animate-spin" aria-hidden="true" />
+              Foto’s voorbereiden…
             </>
           ) : (
             'Start analyse'

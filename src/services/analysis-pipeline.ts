@@ -10,6 +10,7 @@ import {
   estimateCondition,
   isDedicatedPhotoRegion,
 } from '@/features/analysis/quality';
+import { mapWithConcurrency } from '@/lib/async/concurrency';
 import { isAppError } from '@/lib/errors/app-error';
 import { logger } from '@/lib/logging/logger';
 import { getProviders } from '@/providers/registry';
@@ -18,7 +19,7 @@ import { getRepository } from '@/repositories';
 import type {
   NewDetectedCard,
   NewMatchCandidate,
-} from '@/repositories/valtivo-repository';
+} from '@/repositories/pokora-repository';
 import { getFileStorage } from '@/repositories/storage';
 import { trackEvent } from '@/services/analytics';
 import { PIPELINE_STEPS, type PipelineStep } from '@/services/analysis-state';
@@ -40,7 +41,24 @@ import type {
  * resumable. `docs/mvp-limitations.md` describes the queue this would become.
  */
 
-const inFlight = new Set<string>();
+/**
+ * Catalog lookups running at once.
+ *
+ * Four keeps a full binder page overlapping nicely while staying far below the
+ * public API's rate limit. Higher turns into 429s, and the adapter's backoff
+ * then makes the whole step slower than it was serially.
+ */
+export const CATALOG_LOOKUP_CONCURRENCY = 4;
+
+/**
+ * Runs currently executing, keyed by session.
+ *
+ * The promise itself is stored rather than a flag, so a second caller can join
+ * the run that is already going instead of starting a competing one. Two
+ * pipelines over the same session used to interleave and tear each other's
+ * detected cards out from under themselves.
+ */
+const inFlight = new Map<string, Promise<void>>();
 
 export function isAnalysisRunning(sessionId: string): boolean {
   return inFlight.has(sessionId);
@@ -55,19 +73,28 @@ async function setStep(sessionId: string, step: PipelineStep): Promise<void> {
 
 /** Start the pipeline without blocking the caller. Safe to call twice. */
 export function startAnalysisInBackground(sessionId: string): void {
-  if (inFlight.has(sessionId)) return;
-  inFlight.add(sessionId);
-  void runAnalysis(sessionId)
-    .catch((error) => {
-      logger.error('Analysis pipeline crashed', error, { sessionId });
-    })
-    .finally(() => {
-      inFlight.delete(sessionId);
-    });
+  void runAnalysis(sessionId).catch((error) => {
+    logger.error('Analysis pipeline crashed', error, { sessionId });
+  });
 }
 
-/** Run the pipeline to completion. Used directly by tests. */
-export async function runAnalysis(sessionId: string): Promise<void> {
+/**
+ * Run the pipeline to completion, or join the run already under way for this
+ * session. Used directly by tests, and by anything that needs to wait for the
+ * result rather than fire and forget.
+ */
+export function runAnalysis(sessionId: string): Promise<void> {
+  const existing = inFlight.get(sessionId);
+  if (existing) return existing;
+
+  const run = executeAnalysis(sessionId).finally(() => {
+    inFlight.delete(sessionId);
+  });
+  inFlight.set(sessionId, run);
+  return run;
+}
+
+async function executeAnalysis(sessionId: string): Promise<void> {
   const repository = getRepository();
 
   try {
@@ -280,9 +307,56 @@ async function matchCards(
   // Cards were inserted in the same order they were recognised.
   const flatResults = recognised.flatMap((entry) => entry.results);
 
-  for (const [index, card] of cards.entries()) {
+  const lookups = cards.flatMap((card, index) => {
     const result = flatResults[index];
-    if (!result || card.reviewStatus === 'unknown') continue;
+    if (!result || card.reviewStatus === 'unknown') return [];
+    return [{ card, result }];
+  });
+
+  // Every card is an independent remote query, so they overlap. Run serially a
+  // full binder page meant nine round trips end to end - up to eighteen once
+  // the name-only fallback kicked in - which dominated the whole analysis.
+  const pools = await mapWithConcurrency(
+    lookups,
+    CATALOG_LOOKUP_CONCURRENCY,
+    async ({ card, result }) => {
+      // A catalog outage must not discard successful recognition work. One
+      // card that cannot be looked up simply stays `pending` with no
+      // candidates, so the user can still search for it by hand - the same
+      // containment the pricing step already had.
+      try {
+        const searchResults = await providers.catalog.searchCards({
+          name: result.visibleName ?? undefined,
+          cardNumber: result.visibleCardNumber ?? undefined,
+          limit: 25,
+        });
+
+        // A number-only search can miss; widen to name-only when nothing
+        // landed.
+        return searchResults.length > 0
+          ? searchResults
+          : await providers.catalog.searchCards({
+              name: result.visibleName ?? undefined,
+              limit: 25,
+            });
+      } catch (error) {
+        logger.warn('Catalog lookup failed for card; leaving it for review', {
+          detectedCardId: card.id,
+          code: isAppError(error) ? error.code : 'UNKNOWN',
+        });
+        return null;
+      }
+    },
+  );
+
+  // Writes stay sequential. They are cheap next to the network calls, and
+  // keeping them ordered means candidate ranks land in a predictable order.
+  for (const [index, { card, result }] of lookups.entries()) {
+    const pool = pools[index];
+    if (!pool || pool.length === 0) {
+      await repository.replaceMatchCandidates(card.id, []);
+      continue;
+    }
 
     const matchInput: MatchInput = {
       visibleName: result.visibleName,
@@ -291,40 +365,6 @@ async function matchCards(
       language: result.language,
       variantHints: result.variantHints,
     };
-
-    // A catalog outage must not discard successful recognition work. One card
-    // that cannot be looked up simply stays `pending` with no candidates, so
-    // the user can still search for it by hand - the same containment the
-    // pricing step already had.
-    let pool: CatalogCard[];
-    try {
-      const searchResults = await providers.catalog.searchCards({
-        name: result.visibleName ?? undefined,
-        cardNumber: result.visibleCardNumber ?? undefined,
-        limit: 25,
-      });
-
-      // A number-only search can miss; widen to name-only when nothing landed.
-      pool =
-        searchResults.length > 0
-          ? searchResults
-          : await providers.catalog.searchCards({
-              name: result.visibleName ?? undefined,
-              limit: 25,
-            });
-    } catch (error) {
-      logger.warn('Catalog lookup failed for card; leaving it for review', {
-        detectedCardId: card.id,
-        code: isAppError(error) ? error.code : 'UNKNOWN',
-      });
-      await repository.replaceMatchCandidates(card.id, []);
-      continue;
-    }
-
-    if (pool.length === 0) {
-      await repository.replaceMatchCandidates(card.id, []);
-      continue;
-    }
 
     const ranked = rankCandidates(matchInput, pool, MAX_MATCH_CANDIDATES);
     await repository.upsertCatalogCards(ranked.map((entry) => entry.card));

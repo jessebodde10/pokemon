@@ -46,6 +46,12 @@ import type { CatalogCard } from '@/types/domain';
 
 const uuid = z.string().min(1).max(128);
 
+const sourceMetricsSchema = z.object({
+  width: z.coerce.number().int().positive(),
+  height: z.coerce.number().int().positive(),
+  byteSize: z.coerce.number().int().positive(),
+});
+
 export async function createAnalysisSessionAction(): Promise<
   ActionResult<{ sessionId: string; maxImages: number }>
 > {
@@ -83,6 +89,14 @@ export async function uploadImageAction(
       throw new Error('No file supplied');
     }
 
+    // Present only when the browser downscaled the photo. Treated as a hint:
+    // the service validates it against the file that actually arrived.
+    const source = sourceMetricsSchema.safeParse({
+      width: formData.get('sourceWidth'),
+      height: formData.get('sourceHeight'),
+      byteSize: formData.get('sourceBytes'),
+    });
+
     const image = await registerUploadedImage({
       sessionId,
       requester: await getRequester(),
@@ -90,6 +104,7 @@ export async function uploadImageAction(
         filename: file.name,
         declaredMimeType: file.type,
         bytes: new Uint8Array(await file.arrayBuffer()),
+        source: source.success ? source.data : null,
       },
     });
 

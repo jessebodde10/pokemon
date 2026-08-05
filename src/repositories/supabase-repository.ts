@@ -20,7 +20,7 @@ import type {
   SupportedLanguage,
 } from '@/types/domain';
 import type {
-  ValtivoRepository,
+  PokoraRepository,
   DetectedCardPatch,
   NewAnalysisImage,
   NewAnalysisSession,
@@ -29,7 +29,7 @@ import type {
   NewDetectedCard,
   NewMatchCandidate,
   SessionPatch,
-} from './valtivo-repository';
+} from './pokora-repository';
 
 /**
  * Supabase-backed repository.
@@ -197,7 +197,7 @@ function mapCollectionItem(row: Row): CollectionItem {
   };
 }
 
-export class SupabaseValtivoRepository implements ValtivoRepository {
+export class SupabasePokoraRepository implements PokoraRepository {
   readonly name = 'supabase';
 
   private get db(): SupabaseClient {

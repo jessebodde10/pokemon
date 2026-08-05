@@ -31,7 +31,7 @@ export default async function LoginPage() {
 
       {devMode ? (
         <p className="mt-5 rounded-xl border border-[color-mix(in_oklab,var(--color-caution)_35%,transparent)] bg-[color-mix(in_oklab,var(--color-caution)_10%,transparent)] px-4 py-3 text-xs text-[var(--color-caution)]">
-          Er is geen Supabase-project geconfigureerd. Valtivo AI draait nu in
+          Er is geen Supabase-project geconfigureerd. Pokora AI draait nu in
           ontwikkelmodus met een lokale inlogfallback. Deze fallback is
           uitgeschakeld in productiebuilds.
         </p>

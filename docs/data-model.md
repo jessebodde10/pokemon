@@ -154,7 +154,7 @@ JWT-claim waarmee een gast rechtstreeks bij Postgres zou kunnen.
 
 ## Opslag
 
-Migratie `0003` maakt de bucket `valtivo-uploads` aan: `public = false`, limiet
+Migratie `0003` maakt de bucket `pokora-uploads` aan: `public = false`, limiet
 10 MB, MIME-allowlist. Er zijn géén storage-policies voor `anon` of
 `authenticated` — objecten zijn uitsluitend bereikbaar via signed URLs die de
 server aanmaakt nadat hij het verzoek heeft geautoriseerd.
@@ -171,7 +171,7 @@ kan opruimen. Te plannen via `pg_cron` of via
 
 ## In-memory equivalent
 
-`InMemoryValtivoRepository` implementeert dezelfde interface met `Map`s op
+`InMemoryPokoraRepository` implementeert dezelfde interface met `Map`s op
 `globalThis` (zodat hot reload een lopende analyse niet wist). Het respecteert
 dezelfde invarianten: cascade bij delete, samenvoegen van collectie-items,
 sorteren op `position`. De audit-buffer is begrensd op 5000 events zodat een

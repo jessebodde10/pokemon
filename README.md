@@ -1,9 +1,9 @@
-# Valtivo AI
+# Pokora AI
 
 Upload foto's van je Pokémon-kaarten en ontvang een transparante collectieanalyse
 met kaartnamen, geschatte marktwaarden en opvallende kaarten.
 
-> Waarden en conditie-inschattingen zijn indicatief. Valtivo AI is geen
+> Waarden en conditie-inschattingen zijn indicatief. Pokora AI is geen
 > professionele taxateur of gradingdienst.
 
 ---
@@ -89,7 +89,7 @@ src/
     report/            totalen, datakwaliteit, aandachtspunten
   lib/                 errors, logging, validation, images, supabase, random
   providers/           detection/, recognition/, catalog/, pricing/ + registry
-  repositories/        ValtivoRepository + supabase/in-memory + storage
+  repositories/        PokoraRepository + supabase/in-memory + storage
   services/            applicatieservices (orkestratie, autorisatie, state)
   types/               domein- en rapporttypes
   test/                testbootstrap en fixtures
@@ -117,7 +117,7 @@ dus niet plat.
 
 ### Ook de opslag is een adapter
 
-Dit is de belangrijkste architectuurbeslissing van dit project. `ValtivoRepository`
+Dit is de belangrijkste architectuurbeslissing van dit project. `PokoraRepository`
 heeft twee implementaties:
 
 - **Supabase** — zodra `NEXT_PUBLIC_SUPABASE_URL`, de anon key én de service-role
@@ -205,7 +205,7 @@ fallback wordt hard uitgeschakeld zodra `NODE_ENV=production`.
 4. Zet in Auth → URL Configuration de redirect-URL op
    `{NEXT_PUBLIC_APP_URL}/api/auth/callback`.
 
-Migratie `0003` maakt de private bucket `valtivo-uploads` aan met een limiet van
+Migratie `0003` maakt de private bucket `pokora-uploads` aan met een limiet van
 10 MB en een MIME-allowlist. Zodra de drie variabelen staan, schakelt de app bij
 de volgende start automatisch over op Supabase.
 
@@ -423,6 +423,6 @@ respectieve rechthebbenden.
 
 ---
 
-Valtivo AI is niet verbonden aan, en wordt niet gesteund door, de uitgevers of
+Pokora AI is niet verbonden aan, en wordt niet gesteund door, de uitgevers of
 rechthebbenden van de Pokémon-kaarten. Kaart- en setnamen worden uitsluitend
 beschrijvend gebruikt.

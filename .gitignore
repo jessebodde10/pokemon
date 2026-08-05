@@ -13,7 +13,7 @@ playwright-report
 test-results
 .vercel
 .DS_Store
-.valtivo-storage
+.pokora-storage
 
 # Local logs and per-machine editor settings
 *.log

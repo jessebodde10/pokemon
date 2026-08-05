@@ -1,4 +1,4 @@
--- Valtivo AI - row level security
+-- Pokora AI - row level security
 --
 -- The application server uses the service-role key and performs its own
 -- authorisation in `src/services/analysis-access.ts`. These policies are

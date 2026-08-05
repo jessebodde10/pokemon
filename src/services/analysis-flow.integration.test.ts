@@ -1,11 +1,12 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import {
-  InMemoryValtivoRepository,
+  InMemoryPokoraRepository,
   resetInMemoryStore,
 } from '@/repositories/in-memory-repository';
 import { getRepository, setRepository } from '@/repositories';
 import { InMemoryFileStorage, setFileStorage } from '@/repositories/storage';
-import { setProviders } from '@/providers/registry';
+import { getProviders, setProviders } from '@/providers/registry';
+import type { CardCatalogProvider } from '@/providers/types';
 import {
   changeCardMatch,
   confirmCardMatch,
@@ -18,7 +19,7 @@ import {
   removeDetectedCard,
   startAnalysis,
 } from './analysis-service';
-import { runAnalysis } from './analysis-pipeline';
+import { CATALOG_LOOKUP_CONCURRENCY, runAnalysis } from './analysis-pipeline';
 import { generateCollectionReport } from './report-service';
 import { addConfirmedCardsToCollection } from './collection-service';
 import { createTestPng } from '@/test/fixtures/test-image';
@@ -35,7 +36,7 @@ const guest: Requester = { userId: null, guestToken: GUEST_TOKEN };
 
 beforeEach(() => {
   resetInMemoryStore();
-  setRepository(new InMemoryValtivoRepository());
+  setRepository(new InMemoryPokoraRepository());
   setFileStorage(new InMemoryFileStorage());
   setProviders(null);
 });
@@ -63,6 +64,62 @@ async function runFullAnalysis() {
   await runAnalysis(session.id);
   return session;
 }
+
+/**
+ * Wraps the real mock catalog so lookups take measurable time and records how
+ * many were in flight at once.
+ */
+function instrumentedCatalog() {
+  const base = getProviders().catalog;
+  const state = { peak: 0, active: 0, calls: 0 };
+  const catalog: CardCatalogProvider = {
+    name: base.name,
+    getCardById: (id) => base.getCardById(id),
+    searchCards: async (query) => {
+      state.calls += 1;
+      state.active += 1;
+      state.peak = Math.max(state.peak, state.active);
+      await new Promise((resolve) => setTimeout(resolve, 5));
+      state.active -= 1;
+      return base.searchCards(query);
+    },
+  };
+  setProviders({ ...getProviders(), catalog });
+  return state;
+}
+
+describe('catalog matching runs concurrently', () => {
+  it('overlaps lookups instead of walking the page one card at a time', async () => {
+    const state = instrumentedCatalog();
+    await runFullAnalysis();
+
+    // The mock page holds nine cards, so a serial run would peak at one.
+    expect(state.calls).toBeGreaterThan(1);
+    expect(state.peak).toBeGreaterThan(1);
+    expect(state.peak).toBeLessThanOrEqual(CATALOG_LOOKUP_CONCURRENCY);
+  });
+
+  it('still produces the same matches as a serial run', async () => {
+    const serial = await runFullAnalysis();
+    const serialCards = await getRepository().listDetectedCards(serial.id);
+    const serialSelection = serialCards.map(
+      (card) => card.selectedCatalogCardId,
+    );
+
+    resetInMemoryStore();
+    setRepository(new InMemoryPokoraRepository());
+    setFileStorage(new InMemoryFileStorage());
+    setProviders(null);
+    instrumentedCatalog();
+
+    const parallel = await runFullAnalysis();
+    const parallelCards = await getRepository().listDetectedCards(parallel.id);
+
+    expect(parallelCards.map((card) => card.selectedCatalogCardId)).toEqual(
+      serialSelection,
+    );
+  });
+});
 
 describe('creating an analysis session', () => {
   it('starts in the created state with a guest expiry', async () => {
@@ -296,7 +353,7 @@ describe('running the mock pipeline', () => {
     ).cards.map((card) => card.card.visibleName);
 
     resetInMemoryStore();
-    setRepository(new InMemoryValtivoRepository());
+    setRepository(new InMemoryPokoraRepository());
     setFileStorage(new InMemoryFileStorage());
 
     const second = await runFullAnalysis();

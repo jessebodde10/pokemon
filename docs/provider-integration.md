@@ -145,7 +145,7 @@ Supabase Storage, maar niet bij de lokale ontwikkelopslag.
 
 ## Repository vervangen
 
-`ValtivoRepository` is óók een adapter. Voor een andere database: implementeer de
+`PokoraRepository` is óók een adapter. Voor een andere database: implementeer de
 interface, registreer hem in `src/repositories/index.ts`. Let op de invarianten
 die de services aannemen:
 

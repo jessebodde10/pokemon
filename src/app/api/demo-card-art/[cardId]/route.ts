@@ -36,7 +36,7 @@ export async function GET(
   <text x="24" y="242" font-family="system-ui, sans-serif" font-size="11" fill="#e7e5e4">${escapeXml(truncate(card.setName, 26))}</text>
   <text x="24" y="262" font-family="system-ui, sans-serif" font-size="11" fill="hsl(${hue} 25% 75%)">${escapeXml(card.cardNumber)}</text>
   <text x="24" y="282" font-family="system-ui, sans-serif" font-size="10" fill="hsl(${hue} 20% 68%)">${escapeXml(card.variant ?? 'onbekende variant')}</text>
-  <text x="24" y="322" font-family="system-ui, sans-serif" font-size="9" fill="hsl(${hue} 20% 60%)">Valtivo AI demodata</text>
+  <text x="24" y="322" font-family="system-ui, sans-serif" font-size="9" fill="hsl(${hue} 20% 60%)">Pokora AI demodata</text>
 </svg>`;
 
   return new NextResponse(svg, {

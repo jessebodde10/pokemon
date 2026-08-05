@@ -1,4 +1,4 @@
--- Valtivo AI - private storage bucket and guest retention
+-- Pokora AI - private storage bucket and guest retention
 --
 -- The bucket is private: no anonymous or authenticated role gets a storage
 -- policy, so objects are only reachable through signed URLs minted by the
@@ -6,8 +6,8 @@
 
 insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
 values (
-  'valtivo-uploads',
-  'valtivo-uploads',
+  'pokora-uploads',
+  'pokora-uploads',
   false,
   10485760, -- 10 MB, mirrors MAX_UPLOAD_BYTES
   array['image/jpeg', 'image/png', 'image/webp']
@@ -61,7 +61,7 @@ revoke all on function public.delete_expired_guest_analyses() from public;
 
 -- Schedule with pg_cron if the extension is available on your project:
 --   select cron.schedule(
---     'valtivo-ai-guest-cleanup', '17 * * * *',
+--     'pokora-ai-guest-cleanup', '17 * * * *',
 --     $$select public.delete_expired_guest_analyses();$$
 --   );
 -- Otherwise call POST /api/maintenance/cleanup from an external scheduler.

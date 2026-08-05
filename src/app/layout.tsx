@@ -8,18 +8,18 @@ import './globals.css';
 export const metadata: Metadata = {
   metadataBase: new URL(publicConfig.appUrl),
   title: {
-    default: 'Valtivo AI — ontdek wat er in je Pokémon-binder zit',
-    template: '%s — Valtivo AI',
+    default: 'Pokora AI — ontdek wat er in je Pokémon-binder zit',
+    template: '%s — Pokora AI',
   },
   description:
     'Upload foto’s van je Pokémon-kaarten en ontvang een transparante analyse met kaartnamen, geschatte marktwaarden en opvallende kaarten.',
-  applicationName: 'Valtivo AI',
+  applicationName: 'Pokora AI',
   alternates: { canonical: '/' },
   openGraph: {
     type: 'website',
     locale: 'nl_NL',
-    siteName: 'Valtivo AI',
-    title: 'Valtivo AI — ontdek wat er in je Pokémon-binder zit',
+    siteName: 'Pokora AI',
+    title: 'Pokora AI — ontdek wat er in je Pokémon-binder zit',
     description:
       'Upload foto’s van je kaarten en ontvang een transparante collectieanalyse met geschatte marktwaarden en bronvermelding.',
   },

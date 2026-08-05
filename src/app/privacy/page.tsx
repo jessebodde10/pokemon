@@ -5,7 +5,7 @@ import { serverConfig } from '@/config/env';
 export const metadata: Metadata = {
   title: 'Privacy',
   description:
-    'Welke foto’s Valtivo AI verwerkt, waarom, hoe lang gastanalyses bewaard blijven en hoe je je gegevens verwijdert.',
+    'Welke foto’s Pokora AI verwerkt, waarom, hoe lang gastanalyses bewaard blijven en hoe je je gegevens verwijdert.',
   alternates: { canonical: '/privacy' },
 };
 
@@ -13,7 +13,7 @@ export default function PrivacyPage() {
   return (
     <LegalPage
       title="Privacy"
-      intro="Valtivo AI verwerkt foto’s van kaarten. Hieronder staat precies wat er gebeurt met die foto’s en met de gegevens die eruit worden afgeleid."
+      intro="Pokora AI verwerkt foto’s van kaarten. Hieronder staat precies wat er gebeurt met die foto’s en met de gegevens die eruit worden afgeleid."
       updatedAt="5 augustus 2026"
     >
       <LegalSection heading="Welke foto’s worden verwerkt">
@@ -36,12 +36,12 @@ export default function PrivacyPage() {
 
       <LegalSection heading="Externe AI- en databronnen">
         <p>
-          Afhankelijk van de configuratie kan Valtivo AI gebruikmaken van
-          externe diensten: een multimodaal AI-model voor kaartherkenning, een
-          publieke kaartcatalogus en een prijsbron. Bij herkenning door een
-          extern model wordt de betreffende afbeelding naar die dienst
-          verstuurd. In de demo-/mockmodus gebeurt dit niet: dan wordt alles
-          lokaal met voorbeelddata afgehandeld.
+          Afhankelijk van de configuratie kan Pokora AI gebruikmaken van externe
+          diensten: een multimodaal AI-model voor kaartherkenning, een publieke
+          kaartcatalogus en een prijsbron. Bij herkenning door een extern model
+          wordt de betreffende afbeelding naar die dienst verstuurd. In de
+          demo-/mockmodus gebeurt dit niet: dan wordt alles lokaal met
+          voorbeelddata afgehandeld.
         </p>
       </LegalSection>
 

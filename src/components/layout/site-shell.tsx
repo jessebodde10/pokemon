@@ -5,14 +5,14 @@ import { getCurrentUser } from '@/features/auth/session';
 import { cn } from '@/lib/utils';
 
 export const LEGAL_DISCLAIMER =
-  'Valtivo AI geeft indicatieve informatie op basis van herkenningstechnologie en beschikbare marktdata. Werkelijke verkoopprijzen kunnen afwijken. Valtivo AI is geen professionele taxatie-, grading- of beleggingsdienst.';
+  'Pokora AI geeft indicatieve informatie op basis van herkenningstechnologie en beschikbare marktdata. Werkelijke verkoopprijzen kunnen afwijken. Pokora AI is geen professionele taxatie-, grading- of beleggingsdienst.';
 
 /**
  * The wordmark is one of the three places the holo sheen is allowed to appear.
  * The mark is a stack of sleeves - a binder, not a creature - so nothing about
  * it reads as an imitation of an official trading-card brand.
  */
-export function ValtivoLogo({ className }: { className?: string }) {
+export function PokoraLogo({ className }: { className?: string }) {
   return (
     <span className={cn('flex items-center gap-2.5', className)}>
       <span
@@ -28,7 +28,7 @@ export function ValtivoLogo({ className }: { className?: string }) {
         />
       </span>
       <span className="font-[family-name:var(--font-display)] text-[17px] font-bold tracking-tight whitespace-nowrap">
-        Valtivo<span className="text-[var(--color-ink-500)]"> AI</span>
+        Pokora<span className="text-[var(--color-ink-500)]"> AI</span>
       </span>
     </span>
   );
@@ -40,12 +40,8 @@ export async function SiteHeader() {
   return (
     <header className="sticky top-0 z-40 border-b border-[var(--border-subtle)] bg-[color-mix(in_oklab,var(--surface-page)_88%,transparent)] backdrop-blur">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-2 px-4 sm:gap-4 sm:px-6">
-        <Link
-          href="/"
-          className="rounded-md"
-          aria-label="Valtivo AI, naar home"
-        >
-          <ValtivoLogo />
+        <Link href="/" className="rounded-md" aria-label="Pokora AI, naar home">
+          <PokoraLogo />
         </Link>
 
         <nav
@@ -107,7 +103,7 @@ export function SiteFooter() {
       <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
         <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
           <div className="max-w-md">
-            <ValtivoLogo />
+            <PokoraLogo />
             <p className="mt-3 text-sm text-[var(--text-muted)]">
               Inzicht in je Pokémon-kaartenverzameling, met open kaart over wat
               we wel en niet zeker weten.
@@ -144,7 +140,7 @@ export function SiteFooter() {
         </div>
 
         <p className="mt-8 border-t border-[var(--border-subtle)] pt-6 text-xs leading-relaxed text-[var(--color-ink-500)]">
-          {LEGAL_DISCLAIMER} Valtivo AI is niet verbonden aan, en wordt niet
+          {LEGAL_DISCLAIMER} Pokora AI is niet verbonden aan, en wordt niet
           gesteund door, de uitgevers of rechthebbenden van de Pokémon-kaarten.
           Kaartnamen worden uitsluitend beschrijvend gebruikt.
         </p>
@@ -162,7 +158,7 @@ export function DisclaimerNotice({ compact = false }: { compact?: boolean }) {
           : 'rounded-xl border border-[var(--border-subtle)] bg-[var(--color-ink-900)] px-4 py-3 text-sm leading-relaxed text-[var(--text-muted)]'
       }
     >
-      Waarden en conditie-inschattingen zijn indicatief. Valtivo AI is geen
+      Waarden en conditie-inschattingen zijn indicatief. Pokora AI is geen
       professionele taxateur of gradingdienst.
     </p>
   );

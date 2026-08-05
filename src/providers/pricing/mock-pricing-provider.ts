@@ -12,7 +12,7 @@ import {
 import type { PricingProvider, PricingRequest } from '@/providers/types';
 import type { CatalogCard, PriceEstimate } from '@/types/domain';
 
-export const MOCK_PRICE_SOURCE_NAME = 'Valtivo AI demodata';
+export const MOCK_PRICE_SOURCE_NAME = 'Pokora AI demodata';
 
 /**
  * Simulated marketplace observations.

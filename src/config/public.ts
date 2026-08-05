@@ -22,6 +22,20 @@ export const uploadConstraints = {
   maxBytes: 10 * 1024 * 1024,
 } as const;
 
+/**
+ * Client-side downscaling applied before upload.
+ *
+ * 1600px on the long edge keeps a 3x3 binder page at roughly 530x400 per
+ * pocket, which is comfortably above what a card number needs to stay legible,
+ * while cutting a typical phone photo from megabytes to a few hundred KB.
+ */
+export const downscaleConstraints = {
+  maxEdge: 1600,
+  quality: 0.85,
+  /** Below this saving the re-encode is not worth the quality loss. */
+  minSaving: 0.15,
+} as const;
+
 export type AcceptedMimeType =
   (typeof uploadConstraints.acceptedMimeTypes)[number];
 

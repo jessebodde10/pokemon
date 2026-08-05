@@ -106,6 +106,40 @@ export function describePhotoQuality(input: {
   return { level, messages };
 }
 
+export type ImageMetrics = { width: number; height: number; byteSize: number };
+
+/** Sanity ceilings on a client-reported original: 100 MP and 100 MB. */
+const MAX_CLAIMED_PIXELS = 100_000_000;
+const MAX_CLAIMED_BYTES = 100 * 1024 * 1024;
+
+/**
+ * Decides which measurements describe the photo for quality purposes.
+ *
+ * The browser shrinks a photo before uploading it, so the bytes that arrive are
+ * not the photo the user took. Scoring the shrunken copy would mark every good
+ * photo down. The client therefore reports the original measurements, and
+ * because that number is client-supplied it is only honoured when it is
+ * consistent with a downscale: never smaller than what actually arrived, and
+ * never implausibly large. Anything else falls back to the stored file, which
+ * at worst understates quality.
+ */
+export function reconcileSourceMetrics(
+  stored: ImageMetrics,
+  claimed: ImageMetrics | null,
+): ImageMetrics {
+  if (!claimed) return stored;
+  if (!Number.isFinite(claimed.width * claimed.height * claimed.byteSize)) {
+    return stored;
+  }
+  if (claimed.width < stored.width || claimed.height < stored.height) {
+    return stored;
+  }
+  if (claimed.byteSize < stored.byteSize) return stored;
+  if (claimed.width * claimed.height > MAX_CLAIMED_PIXELS) return stored;
+  if (claimed.byteSize > MAX_CLAIMED_BYTES) return stored;
+  return claimed;
+}
+
 export function qualityWarningsFor(input: {
   width: number;
   height: number;

@@ -74,7 +74,7 @@ export type NewAuditEvent = {
   metadata: Record<string, unknown>;
 };
 
-export interface ValtivoRepository {
+export interface PokoraRepository {
   readonly name: string;
 
   // --- sessions ---

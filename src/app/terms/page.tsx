@@ -5,7 +5,7 @@ import { serverConfig } from '@/config/env';
 export const metadata: Metadata = {
   title: 'Voorwaarden',
   description:
-    'De gebruiksvoorwaarden van Valtivo AI: wat je mag uploaden, welke limieten gelden en wat je van de dienst mag verwachten.',
+    'De gebruiksvoorwaarden van Pokora AI: wat je mag uploaden, welke limieten gelden en wat je van de dienst mag verwachten.',
   alternates: { canonical: '/terms' },
 };
 
@@ -13,12 +13,12 @@ export default function TermsPage() {
   return (
     <LegalPage
       title="Gebruiksvoorwaarden"
-      intro="Korte, leesbare afspraken over het gebruik van Valtivo AI."
+      intro="Korte, leesbare afspraken over het gebruik van Pokora AI."
       updatedAt="5 augustus 2026"
     >
       <LegalSection heading="Wat de dienst doet">
         <p>
-          Valtivo AI herkent Pokémon-kaarten op foto’s die je uploadt en toont
+          Pokora AI herkent Pokémon-kaarten op foto’s die je uploadt en toont
           daar een indicatieve analyse bij. De dienst wordt aangeboden “zoals
           hij is”, zonder garantie op beschikbaarheid, volledigheid of
           nauwkeurigheid.
@@ -48,7 +48,7 @@ export default function TermsPage() {
 
       <LegalSection heading="Wat de dienst niet is">
         <p>
-          Valtivo AI is geen taxatiedienst, geen gradingdienst, geen marktplaats
+          Pokora AI is geen taxatiedienst, geen gradingdienst, geen marktplaats
           en geen aanbieder van financieel advies. Beslissingen die je op basis
           van de getoonde informatie neemt, neem je zelf.
         </p>
@@ -64,7 +64,7 @@ export default function TermsPage() {
 
       <LegalSection heading="Aansprakelijkheid">
         <p>
-          Voor zover wettelijk toegestaan is Valtivo AI niet aansprakelijk voor
+          Voor zover wettelijk toegestaan is Pokora AI niet aansprakelijk voor
           schade die voortvloeit uit het gebruik van de getoonde schattingen,
           herkenningen of adviesloze observaties.
         </p>

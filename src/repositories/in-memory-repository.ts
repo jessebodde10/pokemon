@@ -11,7 +11,7 @@ import type {
   StoredPriceEstimate,
 } from '@/types/domain';
 import type {
-  ValtivoRepository,
+  PokoraRepository,
   DetectedCardPatch,
   NewAnalysisImage,
   NewAnalysisSession,
@@ -20,7 +20,7 @@ import type {
   NewDetectedCard,
   NewMatchCandidate,
   SessionPatch,
-} from './valtivo-repository';
+} from './pokora-repository';
 
 /**
  * In-memory repository used when Supabase is not configured.
@@ -42,7 +42,7 @@ type Store = {
   events: AuditEvent[];
 };
 
-const STORE_KEY = Symbol.for('valtivo-ai.in-memory-store');
+const STORE_KEY = Symbol.for('pokora-ai.in-memory-store');
 
 function getStore(): Store {
   const globalRef = globalThis as unknown as Record<symbol, Store | undefined>;
@@ -72,7 +72,7 @@ export function resetInMemoryStore(): void {
 
 const nowIso = () => new Date().toISOString();
 
-export class InMemoryValtivoRepository implements ValtivoRepository {
+export class InMemoryPokoraRepository implements PokoraRepository {
   readonly name = 'in-memory';
 
   private get store(): Store {

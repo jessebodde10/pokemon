@@ -27,7 +27,7 @@ const envSchema = z.object({
     .catch('none'),
 
   SUPABASE_SERVICE_ROLE_KEY: z.string().default(''),
-  SUPABASE_STORAGE_BUCKET: z.string().min(1).catch('valtivo-uploads'),
+  SUPABASE_STORAGE_BUCKET: z.string().min(1).catch('pokora-uploads'),
 
   GUEST_ANALYSIS_TTL_HOURS: positiveInt(24),
   GUEST_MAX_IMAGES: positiveInt(3),
@@ -55,7 +55,7 @@ const envSchema = z.object({
   PRICING_PROVIDER: z.enum(['mock', 'pokemontcg']).catch('mock'),
   PRICING_API_KEY: z.string().default(''),
 
-  RATE_LIMIT_SALT: z.string().default('valtivo-ai-development-salt'),
+  RATE_LIMIT_SALT: z.string().default('pokora-ai-development-salt'),
   RATE_LIMIT_ENABLED: booleanish.catch(true),
 
   DEV_AUTH_FALLBACK: booleanish.catch(true),

@@ -24,10 +24,10 @@ function readSaltFromEnvFile() {
 const salt =
   process.env.RATE_LIMIT_SALT ??
   readSaltFromEnvFile() ??
-  'valtivo-ai-development-salt';
+  'pokora-ai-development-salt';
 
 const token = createHmac('sha256', salt)
-  .update('valtivo-ai:maintenance')
+  .update('pokora-ai:maintenance')
   .digest('hex');
 
 process.stdout.write(

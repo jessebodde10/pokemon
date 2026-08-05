@@ -4,6 +4,7 @@ import {
   estimateCondition,
   isDedicatedPhotoRegion,
   qualityWarningsFor,
+  reconcileSourceMetrics,
 } from '@/features/analysis/quality';
 import {
   MAX_MATCH_CANDIDATES,
@@ -95,6 +96,11 @@ export type UploadCandidate = {
   filename: string;
   declaredMimeType: string;
   bytes: Uint8Array;
+  /**
+   * Measurements of the photo before the browser downscaled it, when it did.
+   * Used for quality scoring only, and validated before it is trusted.
+   */
+  source?: { width: number; height: number; byteSize: number } | null;
 };
 
 /**
@@ -152,11 +158,17 @@ export async function registerUploadedImage(input: {
     inspected.format,
   );
 
-  const warnings = qualityWarningsFor({
-    width: inspected.width,
-    height: inspected.height,
-    byteSize: bytes.byteLength,
-  });
+  // Quality describes the photo as taken; the stored file may be a smaller
+  // copy the browser produced to keep the upload quick.
+  const metrics = reconcileSourceMetrics(
+    {
+      width: inspected.width,
+      height: inspected.height,
+      byteSize: bytes.byteLength,
+    },
+    input.file.source ?? null,
+  );
+  const warnings = qualityWarningsFor(metrics);
 
   const image = await repository.addImage({
     analysisSessionId: session.id,
@@ -165,9 +177,12 @@ export async function registerUploadedImage(input: {
     // a path. Strip directory components defensively.
     originalFilename: filename.replace(/^.*[\\/]/, '').slice(0, 160),
     mimeType: inspected.format,
-    width: inspected.width,
-    height: inspected.height,
-    byteSize: bytes.byteLength,
+    // The photo's own measurements, not the downscaled copy's. Every consumer
+    // of these three fields feeds a quality judgement, which has to describe
+    // what the user photographed.
+    width: metrics.width,
+    height: metrics.height,
+    byteSize: metrics.byteSize,
     processingStatus: 'pending',
     qualityScore: null,
     qualityWarnings: warnings,
