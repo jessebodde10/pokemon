@@ -411,6 +411,16 @@ De belangrijkste:
 - [`docs/pricing-methodology.md`](docs/pricing-methodology.md)
 - [`docs/mvp-limitations.md`](docs/mvp-limitations.md)
 
+## Licentie
+
+MIT — zie [`LICENSE`](LICENSE). Je mag de code vrij gebruiken, aanpassen en
+verspreiden, ook commercieel, zolang de copyrightvermelding meegaat. De software
+wordt geleverd zonder enige garantie.
+
+De licentie dekt alleen deze broncode. Kaartnamen, setnamen en marktdata die de
+app via externe bronnen ophaalt vallen daar niet onder; die blijven van hun
+respectieve rechthebbenden.
+
 ---
 
 Valtivo AI is niet verbonden aan, en wordt niet gesteund door, de uitgevers of
