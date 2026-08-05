@@ -1,0 +1,20 @@
+node_modules
+.next
+.next-e2e-dev
+out
+build
+coverage
+.env
+.env.local
+.env*.local
+*.tsbuildinfo
+next-env.d.ts
+playwright-report
+test-results
+.vercel
+.DS_Store
+.valtivo-storage
+
+# Local logs and per-machine editor settings
+*.log
+.claude/settings.local.json
