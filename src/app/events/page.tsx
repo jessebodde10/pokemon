@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { CalendarDays, Sparkles, Store } from 'lucide-react';
+import { CalendarDays, FlaskConical, Sparkles, Store } from 'lucide-react';
 import { EventsExplorer } from '@/components/events/events-explorer';
 import { Reveal } from '@/components/motion/reveal';
 import { Button } from '@/components/ui/button';
@@ -35,6 +35,11 @@ export default async function EventsPage() {
   const vendorTotal = new Set(items.flatMap((item) => item.event.vendorIds))
     .size;
 
+  const total = items.length;
+  const demoCount = items.filter(
+    (item) => item.event.provenance.kind === 'demo',
+  ).length;
+
   return (
     <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 sm:py-14">
       <section className="relative overflow-hidden rounded-3xl border border-[var(--border-subtle)] px-6 py-12 sm:px-10 sm:py-16">
@@ -63,6 +68,29 @@ export default async function EventsPage() {
             België.
           </p>
         </Reveal>
+
+        {/* Stated once, up front. Every card carries its own marker too, but
+            someone landing here has to know before they scroll that none of
+            this is a real agenda yet. Remove this block once the seeded
+            entries are replaced by checked ones. */}
+        {demoCount > 0 ? (
+          <Reveal delay={0.2}>
+            <p
+              role="status"
+              className="mt-6 flex max-w-2xl items-start gap-2.5 rounded-xl border border-[color-mix(in_oklab,var(--color-caution)_35%,transparent)] bg-[color-mix(in_oklab,var(--color-caution)_10%,transparent)] px-4 py-3 text-sm leading-relaxed text-[var(--color-caution)]"
+            >
+              <FlaskConical
+                className="mt-0.5 size-4 shrink-0"
+                aria-hidden="true"
+              />
+              <span>
+                {demoCount === total
+                  ? 'Let op: alle beurzen hieronder zijn voorbeeldgegevens. Ze zijn verzonnen om het platform te tonen en komen niet overeen met echte evenementen.'
+                  : `Let op: ${demoCount} van de ${total} beurzen hieronder zijn voorbeeldgegevens en komen niet overeen met echte evenementen.`}
+              </span>
+            </p>
+          </Reveal>
+        ) : null}
 
         <Reveal delay={0.24}>
           <div className="mt-7 flex flex-col gap-3 sm:flex-row">

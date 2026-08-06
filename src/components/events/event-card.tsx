@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { ProvenanceBadge } from './provenance-note';
 import { motion, useReducedMotion } from 'framer-motion';
 import { CalendarDays, MapPin, Navigation, Store } from 'lucide-react';
 import {
@@ -67,6 +68,7 @@ export function EventCard({
           </div>
           <div className="absolute right-3 bottom-3">
             <TicketStatusBadge status={item.ticketStatus} />
+            <ProvenanceBadge provenance={item.event.provenance} />
           </div>
         </div>
 

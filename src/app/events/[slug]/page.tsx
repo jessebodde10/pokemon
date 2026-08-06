@@ -30,6 +30,7 @@ import { ReviewSection } from '@/components/events/review-section';
 import { VendorCard } from '@/components/events/vendor-card';
 import { Button } from '@/components/ui/button';
 import { Panel, SectionHeading } from '@/components/ui/primitives';
+import { ProvenanceNote } from '@/components/events/provenance-note';
 import { publicConfig } from '@/config/public';
 import {
   formatEventDate,
@@ -256,6 +257,10 @@ export default async function EventDetailPage({ params }: Params) {
         </header>
 
         <div className="mt-10 space-y-10">
+          {/* Above the summary on purpose: whether these facts have been
+              checked decides how much weight the rest of the page deserves. */}
+          <ProvenanceNote provenance={event.provenance} />
+
           <AiSummary summary={summary} />
 
           <section aria-labelledby="about-heading">

@@ -230,6 +230,36 @@ export const REVIEW_TAG_LABELS: Record<ReviewTag, string> = {
   'veel-slabs': 'Veel slabs',
 };
 
+/**
+ * Where an entry's facts come from, and when someone last checked them.
+ *
+ * This platform republishes information about other people's events. Dates
+ * move, halls change and tickets sell out, so a listing without a source and a
+ * check date is an unverifiable claim about someone else's business. Every
+ * event carries one, and the UI shows it.
+ *
+ * `demo` exists because the platform ships with invented entries. They are
+ * labelled rather than hidden: a visitor must be able to tell seeded example
+ * data from something an organiser actually announced.
+ */
+export type SourceKind = 'organiser' | 'secondary' | 'demo';
+
+export const SOURCE_KIND_LABELS: Record<SourceKind, string> = {
+  organiser: 'Opgave van de organisator',
+  secondary: 'Overgenomen uit een openbare agenda',
+  demo: 'Voorbeeldgegevens',
+};
+
+export type EventProvenance = {
+  kind: SourceKind;
+  /** Who published the facts. Null only for demo entries. */
+  sourceName: string | null;
+  /** Link to the announcement the facts were taken from. */
+  sourceUrl: string | null;
+  /** ISO date on which a human last compared this entry against the source. */
+  lastVerifiedAt: string | null;
+};
+
 /** events */
 export type EventRecord = {
   id: string;
@@ -252,7 +282,32 @@ export type EventRecord = {
   website: string | null;
   /** Set by the organiser; the platform never invents an attendance figure. */
   expectedVisitors: number | null;
+  provenance: EventProvenance;
 };
+
+/** How stale a listing is allowed to get before the UI says so. */
+export const VERIFICATION_STALE_DAYS = 60;
+
+export type VerificationState = 'demo' | 'fresh' | 'stale' | 'unverified';
+
+/**
+ * Turns a provenance record into what the UI should say about it.
+ *
+ * Kept as a pure function so the rule lives in one place: a listing nobody has
+ * checked, and one checked too long ago, both have to read as "confirm this
+ * yourself" rather than quietly passing as current.
+ */
+export function verificationState(
+  provenance: EventProvenance,
+  now: Date = new Date(),
+): VerificationState {
+  if (provenance.kind === 'demo') return 'demo';
+  if (!provenance.lastVerifiedAt) return 'unverified';
+  const checked = Date.parse(provenance.lastVerifiedAt);
+  if (Number.isNaN(checked)) return 'unverified';
+  const days = (now.getTime() - checked) / 86_400_000;
+  return days > VERIFICATION_STALE_DAYS ? 'stale' : 'fresh';
+}
 
 /** favorites */
 export type FavoriteKind = 'event' | 'organizer' | 'vendor';

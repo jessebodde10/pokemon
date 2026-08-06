@@ -1,6 +1,7 @@
 import type {
   AppNotification,
   EventImage,
+  EventProvenance,
   EventRecord,
   EventReview,
   Organizer,
@@ -404,6 +405,18 @@ export const vendors: Vendor[] = [
 ];
 
 /**
+ * Every seeded event is invented, so all of them carry the `demo` marker and
+ * the UI labels them as such. A real entry replaces this with the organiser's
+ * own announcement and the date someone last compared the two.
+ */
+const DEMO_PROVENANCE: EventProvenance = {
+  kind: 'demo',
+  sourceName: null,
+  sourceUrl: null,
+  lastVerifiedAt: null,
+};
+
+/**
  * Dates are generated relative to today so the agenda never looks stale.
  *
  * They snap to a weekend, because verzamelbeurzen are weekend events. A plain
@@ -461,6 +474,7 @@ export const events: EventRecord[] = [
     imageIds: ['image-utrecht-banner'],
     website: 'https://example.com/utrecht-vintage-card-fair',
     expectedVisitors: 2400,
+    provenance: DEMO_PROVENANCE,
   },
   {
     id: 'event-eindhoven-multi',
@@ -488,6 +502,7 @@ export const events: EventRecord[] = [
     imageIds: ['image-eindhoven-banner'],
     website: 'https://example.com/eindhoven-multi-tcg-expo',
     expectedVisitors: 3100,
+    provenance: DEMO_PROVENANCE,
   },
   {
     id: 'event-antwerpen-vintage',
@@ -515,6 +530,7 @@ export const events: EventRecord[] = [
     imageIds: ['image-antwerpen-banner'],
     website: 'https://example.com/antwerpen-collectors-days',
     expectedVisitors: 1900,
+    provenance: DEMO_PROVENANCE,
   },
   {
     id: 'event-zwolle-sealed',
@@ -541,6 +557,7 @@ export const events: EventRecord[] = [
     imageIds: ['image-zwolle-banner'],
     website: null,
     expectedVisitors: 600,
+    provenance: DEMO_PROVENANCE,
   },
   {
     id: 'event-gent-onepiece',
@@ -562,6 +579,7 @@ export const events: EventRecord[] = [
     imageIds: ['image-gent-banner'],
     website: 'https://example.com/gent-one-piece-convention',
     expectedVisitors: 850,
+    provenance: DEMO_PROVENANCE,
   },
   {
     id: 'event-rotterdam-retro',
@@ -588,6 +606,7 @@ export const events: EventRecord[] = [
     imageIds: ['image-rotterdam-banner'],
     website: 'https://example.com/rotterdam-retro-en-cards',
     expectedVisitors: 1500,
+    provenance: DEMO_PROVENANCE,
   },
   {
     id: 'event-utrecht-lorcana',
@@ -608,6 +627,7 @@ export const events: EventRecord[] = [
     imageIds: ['image-lorcana-banner'],
     website: 'https://example.com/utrecht-lorcana-gathering',
     expectedVisitors: 700,
+    provenance: DEMO_PROVENANCE,
   },
   {
     id: 'event-eindhoven-yugioh',
@@ -628,6 +648,7 @@ export const events: EventRecord[] = [
     imageIds: ['image-yugioh-banner'],
     website: null,
     expectedVisitors: 450,
+    provenance: DEMO_PROVENANCE,
   },
   {
     id: 'event-antwerpen-japans',
@@ -651,6 +672,7 @@ export const events: EventRecord[] = [
     imageIds: ['image-japans-banner'],
     website: 'https://example.com/antwerpen-japan-import-fair',
     expectedVisitors: 380,
+    provenance: DEMO_PROVENANCE,
   },
   {
     id: 'event-rotterdam-graded',
@@ -676,6 +698,7 @@ export const events: EventRecord[] = [
     imageIds: ['image-graded-banner'],
     website: 'https://example.com/rotterdam-graded-expo',
     expectedVisitors: 1100,
+    provenance: DEMO_PROVENANCE,
   },
 ];
 
