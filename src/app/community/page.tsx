@@ -45,7 +45,7 @@ export default function CommunityPage() {
       </h1>
       <p className="mt-4 max-w-2xl text-base text-[var(--text-muted)]">
         Deze sectie bestaat nog niet. We zetten hem hier alvast neer zodat je
-        weet waar het komt te staan, maar er valt op dit moment niets te doen.
+        weet waar hij komt te staan, maar er valt op dit moment niets te doen.
       </p>
 
       <section className="mt-10">

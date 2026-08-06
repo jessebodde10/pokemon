@@ -148,8 +148,8 @@ export function SiteFooter() {
           <div className="max-w-md">
             <PokoraLogo />
             <p className="mt-3 text-sm text-[var(--text-muted)]">
-              Inzicht in je Pokémon-kaartenverzameling, met open kaart over wat
-              we wel en niet zeker weten.
+              Inzicht in je Pokémon-kaartenverzameling, inclusief wat we niet
+              zeker weten.
             </p>
           </div>
           {/* Each link is its own row with a 44px hit area. As plain text

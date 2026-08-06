@@ -1,5 +1,5 @@
 import { Sparkles } from 'lucide-react';
-import type { EventSummary } from '@/features/events/summary';
+import { joinDutch, type EventSummary } from '@/features/events/summary';
 
 /**
  * Automatic event summary.
@@ -46,8 +46,8 @@ export function AiSummary({ summary }: { summary: EventSummary }) {
 
       {summary.basedOn.length > 0 ? (
         <p className="mt-4 border-t border-[var(--border-subtle)] pt-3 text-xs text-[var(--text-muted)]">
-          Samengesteld uit {summary.basedOn.join(', ')}. Geen redactionele
-          beoordeling — controleer bij twijfel de standhouderslijst hieronder.
+          Samengesteld uit {joinDutch(summary.basedOn)}. Geen redactionele
+          beoordeling. Controleer bij twijfel de standhouderslijst hieronder.
         </p>
       ) : null}
     </section>

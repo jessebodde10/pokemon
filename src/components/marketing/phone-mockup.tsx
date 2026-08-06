@@ -165,7 +165,7 @@ export function PhoneMockup() {
               Controleer de herkenning
             </h3>
             <p className="mt-1 text-[9px] leading-snug text-[var(--color-ink-500)]">
-              Niets telt mee tot jij het bevestigt.
+              Niets telt mee tot je het bevestigt.
             </p>
 
             <div className="mt-3 space-y-1.5">

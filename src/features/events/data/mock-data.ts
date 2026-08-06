@@ -320,7 +320,7 @@ export const vendors: Vendor[] = [
     id: 'vendor-grail-hunters',
     name: 'Grail Hunters',
     initials: 'GH',
-    tagline: 'Hogere kaarten en trades',
+    tagline: 'Duurdere kaarten en trades',
     description:
       'Richt zich op zeldzamere kaarten en staat open voor ruilen. Neem je eigen kaarten mee als je wilt onderhandelen.',
     categoryIds: ['cat-vintage', 'cat-graded'],
@@ -371,7 +371,7 @@ export const vendors: Vendor[] = [
     id: 'vendor-vintage-vault-be',
     name: 'Vintage Vault BE',
     initials: 'VV',
-    tagline: 'Belgische vintage specialist',
+    tagline: 'Belgische vintagespecialist',
     description:
       'Belgische handelaar met een sterke vintage-voorraad, inclusief Franstalige en Duitse prints uit de eerste sets.',
     categoryIds: ['cat-vintage'],
@@ -613,7 +613,7 @@ export const events: EventRecord[] = [
     id: 'event-eindhoven-yugioh',
     slug: 'eindhoven-duelist-day',
     name: 'Eindhoven Duelist Day',
-    summary: 'Yu-Gi-Oh beurs met meta decks, staples en een testtafel.',
+    summary: 'Yu-Gi-Oh-beurs met meta decks, staples en een testtafel.',
     description:
       'Een compacte Yu-Gi-Oh dag met vooral singles en complete decks. Handig als je gericht staples zoekt. Beperkt aantal standhouders, wel scherpe prijzen.',
     type: 'yu-gi-oh',

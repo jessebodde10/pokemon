@@ -29,8 +29,8 @@ export default async function EventsDashboardPage() {
         Mijn events
       </h1>
       <p className="mt-3 max-w-2xl text-base text-[var(--text-muted)]">
-        Wat je hebt bewaard en volgt. Dit wordt op dit apparaat opgeslagen, niet
-        in een account — leeg je je browser, dan is het weg.
+        Wat je hebt bewaard en volgt. Dit staat op dit apparaat en niet in een
+        account. Leeg je je browser, dan is het weg.
       </p>
 
       <div className="mt-10">

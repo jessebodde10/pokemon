@@ -111,8 +111,8 @@ export default async function AdminPage() {
         <span>
           Wijzigingen hier worden nergens opgeslagen. Ze bestaan zolang deze
           pagina open staat en verdwijnen bij het verversen. Dit scherm laat
-          zien hoe het beheer werkt, het is nog geen beheersysteem — en er zit
-          nog geen toegangscontrole op.
+          zien hoe het beheer eruit gaat zien. Het is nog geen werkend
+          beheersysteem en er zit geen toegangscontrole op.
         </span>
       </p>
 

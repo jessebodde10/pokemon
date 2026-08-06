@@ -31,8 +31,8 @@ export default function AdvisorPage() {
       </h1>
       <p className="mt-4 max-w-2xl text-base text-[var(--text-muted)]">
         Geef aan waar je op verzamelt. Je krijgt drie beurzen terug, elk met de
-        reden waarom die er tussen staat — zodat je zelf kunt beoordelen of het
-        advies hout snijdt.
+        reden waarom die erbij staat, zodat je zelf kunt beoordelen of het
+        klopt.
       </p>
 
       <div className="mt-8">
@@ -46,11 +46,11 @@ export default function AdvisorPage() {
           voorkeur, voor labels die de organisator opgaf en voor de spreiding
           van beoordelingen. Een beurs waar drie van de drie standhouders in
           graded kaarten handelen scoort hoger dan een grote beurs waar dat er
-          drie van de tien zijn — concentratie telt mee, niet alleen aantal.
+          drie van de tien zijn. Het aandeel weegt dus mee, niet alleen het
+          aantal.
         </p>
         <p className="mt-2 text-sm leading-relaxed text-[var(--text-muted)]">
-          Sluit niets aan op je voorkeuren, dan zegt het advies dat, in plaats
-          van de agenda op datum te presenteren alsof het een aanbeveling is.
+          Sluit niets aan op je voorkeuren, dan meldt het advies dat.
         </p>
         <Button asChild variant="ghost" size="sm" className="mt-4 -ml-4">
           <Link href="/events">Liever zelf filteren</Link>

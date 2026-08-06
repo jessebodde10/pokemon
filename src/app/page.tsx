@@ -4,6 +4,7 @@ import {
   CalendarClock,
   Camera,
   CheckCircle2,
+  ChevronDown,
   FileBarChart,
   Gauge,
   Layers3,
@@ -22,8 +23,12 @@ import {
   RevealItem,
 } from '@/components/motion/reveal';
 
+// No `title` here on purpose. This page shares a route segment with the root
+// layout, so the layout's `%s — Pokora` template does not apply to it - a title
+// set here would replace the brand rather than be suffixed with it. Leaving it
+// out falls through to the layout's `default`, which keeps the wording in one
+// place instead of repeating it.
 export const metadata: Metadata = {
-  title: 'Ontdek wat er in je Pokémon-binder zit',
   description:
     'Upload foto’s van je kaarten en ontvang een transparante analyse met kaartnamen, geschatte marktwaarden en opvallende kaarten. Altijd met bron, datum en bandbreedte.',
   alternates: { canonical: '/' },
@@ -40,8 +45,8 @@ const STEPS = [
   {
     icon: ScanSearch,
     title: 'Controleer de herkenning',
-    body: 'Je ziet per kaart hoe zeker de herkenning is en welke alternatieven er zijn. Jij beslist.',
-    meta: 'Niets telt mee tot jij bevestigt',
+    body: 'Je ziet per kaart hoe zeker de herkenning is en welke alternatieven er zijn.',
+    meta: 'Niets telt mee tot je het bevestigt',
   },
   {
     icon: FileBarChart,
@@ -141,8 +146,8 @@ export default function LandingPage() {
 
             <Reveal delay={0.16}>
               <p className="mt-6 max-w-lg text-lg leading-relaxed text-[var(--text-muted)]">
-                Upload foto’s van je kaarten en ontvang een transparante analyse
-                met kaartnamen, geschatte marktwaarden en opvallende kaarten.
+                Upload foto’s van je kaarten en krijg een overzicht met
+                kaartnamen, geschatte marktwaarden en opvallende kaarten.
               </p>
             </Reveal>
 
@@ -184,8 +189,8 @@ export default function LandingPage() {
               Zo werkt het
             </h2>
             <p className="max-w-sm text-sm text-[var(--text-muted)]">
-              Drie stappen, in deze volgorde. De middelste is niet over te slaan
-              — daar beslis jij wat klopt.
+              Drie stappen. Bij de tweede controleer je zelf of de herkenning
+              klopt.
             </p>
           </div>
         </Reveal>
@@ -288,8 +293,8 @@ export default function LandingPage() {
             Wat je bij elk resultaat te zien krijgt
           </h2>
           <p className="mt-4 max-w-xl text-[var(--text-muted)]">
-            Geen enkel bedrag staat er zonder context. Ontbreekt de
-            onderbouwing, dan tonen we geen bedrag.
+            Bij elk bedrag staat waar het vandaan komt. Is er te weinig data,
+            dan tonen we geen bedrag.
           </p>
         </Reveal>
 
@@ -358,18 +363,32 @@ export default function LandingPage() {
           </h2>
         </Reveal>
 
+        {/* Native <details> rather than a scripted accordion. Two reasons that
+            both matter here: the answers stay in the DOM when collapsed, which
+            is what the FAQPage structured data above claims is on the page,
+            and the whole section keeps working without JavaScript - so it is
+            usable before hydration and this page stays a Server Component.
+            Each question opens on its own, so two answers can be compared. */}
         <RevealGroup
-          as="dl"
+          as="div"
           className="mt-8 divide-y divide-[var(--border-subtle)] border-y border-[var(--border-subtle)]"
         >
           {FAQ.map((entry) => (
-            <RevealItem key={entry.question} as="div" className="py-6">
-              <dt className="font-[family-name:var(--font-display)] text-base font-semibold">
-                {entry.question}
-              </dt>
-              <dd className="mt-2 text-sm leading-relaxed text-[var(--text-muted)]">
-                {entry.answer}
-              </dd>
+            <RevealItem key={entry.question} as="div">
+              <details className="group">
+                <summary className="flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 py-4 font-[family-name:var(--font-display)] text-base font-semibold transition-colors hover:text-[var(--color-holo-cyan)] [&::-webkit-details-marker]:hidden">
+                  {entry.question}
+                  <ChevronDown
+                    /* `group-open:` compiles to nothing in Tailwind v4, so
+                       this matches on the open ancestor directly. */
+                    className="size-4 shrink-0 text-[var(--text-muted)] transition-transform duration-200 [[open]_&]:rotate-180"
+                    aria-hidden="true"
+                  />
+                </summary>
+                <p className="pb-5 text-sm leading-relaxed text-[var(--text-muted)]">
+                  {entry.answer}
+                </p>
+              </details>
             </RevealItem>
           ))}
         </RevealGroup>
@@ -388,7 +407,7 @@ export default function LandingPage() {
               }}
             />
             <h2 className="text-[clamp(1.6rem,3.5vw,2.3rem)] leading-tight font-bold">
-              Klaar om te beginnen?
+              Aan de slag
             </h2>
             <p className="mx-auto mt-3 max-w-md text-sm text-[var(--text-muted)]">
               Je eerste analyse werkt zonder account. Bewaren kan later.

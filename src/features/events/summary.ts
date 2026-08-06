@@ -33,7 +33,8 @@ function plural(count: number, singular: string, many: string): string {
   return `${count} ${count === 1 ? singular : many}`;
 }
 
-function joinDutch(values: readonly string[]): string {
+/** Dutch enumeration: commas, then "en" before the last item. */
+export function joinDutch(values: readonly string[]): string {
   if (values.length === 0) return '';
   if (values.length === 1) return values[0] ?? '';
   const head = values.slice(0, -1).join(', ');
