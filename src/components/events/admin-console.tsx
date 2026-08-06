@@ -48,9 +48,7 @@ export function AdminConsole({
 }: {
   collections: AdminCollection[];
 }) {
-  const [activeKey, setActiveKey] = React.useState(
-    collections[0]?.key ?? '',
-  );
+  const [activeKey, setActiveKey] = React.useState(collections[0]?.key ?? '');
   const [state, setState] = React.useState<Record<string, AdminRow[]>>(() =>
     Object.fromEntries(
       collections.map((collection) => [collection.key, collection.rows]),
@@ -59,9 +57,7 @@ export function AdminConsole({
   const [editing, setEditing] = React.useState<AdminRow | null>(null);
   const [creating, setCreating] = React.useState(false);
 
-  const active = collections.find(
-    (collection) => collection.key === activeKey,
-  );
+  const active = collections.find((collection) => collection.key === activeKey);
   const rows = state[activeKey] ?? [];
 
   function reset() {
@@ -78,7 +74,9 @@ export function AdminConsole({
       ...current,
       [activeKey]: (current[activeKey] ?? []).filter((row) => row.id !== id),
     }));
-    toast.success(`${active?.noun ?? 'Item'} verwijderd (alleen in dit scherm)`);
+    toast.success(
+      `${active?.noun ?? 'Item'} verwijderd (alleen in dit scherm)`,
+    );
   }
 
   function save(row: AdminRow) {
@@ -118,8 +116,8 @@ export function AdminConsole({
               }}
               className={
                 selected
-                  ? 'rounded-full border border-[var(--color-holo-cyan)] bg-[color-mix(in_oklab,var(--color-holo-cyan)_18%,transparent)] px-4 py-2 text-sm font-medium text-[var(--color-holo-cyan)]'
-                  : 'rounded-full border border-[var(--border-subtle)] px-4 py-2 text-sm font-medium text-[var(--text-muted)] hover:border-white/30 hover:text-[var(--text-primary)]'
+                  ? 'min-h-11 rounded-full border border-[var(--color-holo-cyan)] bg-[color-mix(in_oklab,var(--color-holo-cyan)_18%,transparent)] px-4 text-sm font-medium text-[var(--color-holo-cyan)]'
+                  : 'min-h-11 rounded-full border border-[var(--border-subtle)] px-4 text-sm font-medium text-[var(--text-muted)] hover:border-white/30 hover:text-[var(--text-primary)]'
               }
             >
               {collection.label}

@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { BackLink } from '@/components/events/back-link';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import {
@@ -172,18 +173,13 @@ export default async function EventDetailPage({ params }: Params) {
         type="application/ld+json"
         // Structured data, not user input: the object is built above from
         // typed records, so there is nothing here to escape.
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(eventJsonLd(detail)) }}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(eventJsonLd(detail)),
+        }}
       />
 
       <article className="mx-auto max-w-5xl px-4 py-8 sm:px-6 sm:py-12">
-        <nav aria-label="Kruimelpad" className="mb-5 text-sm">
-          <Link
-            href="/events"
-            className="text-[var(--text-muted)] hover:text-[var(--text-primary)]"
-          >
-            ← Alle evenementen
-          </Link>
-        </nav>
+        <BackLink href="/events">Alle evenementen</BackLink>
 
         <header>
           <div className="relative overflow-hidden rounded-3xl">
@@ -254,11 +250,7 @@ export default async function EventDetailPage({ params }: Params) {
               targetId={event.id}
               label={event.name}
             />
-            <FollowButton
-              kind="event"
-              targetId={event.id}
-              label={event.name}
-            />
+            <FollowButton kind="event" targetId={event.id} label={event.name} />
             <ShareButton title={event.name} text={event.summary} />
           </div>
         </header>
@@ -280,7 +272,7 @@ export default async function EventDetailPage({ params }: Params) {
                     href={organizer.website}
                     target="_blank"
                     rel="noopener noreferrer nofollow"
-                    className="inline-flex items-center gap-1 text-[var(--color-holo-cyan)] hover:underline"
+                    className="-ml-2 inline-flex min-h-11 items-center gap-1 rounded-lg px-2 text-[var(--color-holo-cyan)] transition-colors hover:bg-white/[0.06] hover:underline"
                   >
                     Website
                     <ExternalLink className="size-3.5" aria-hidden="true" />
@@ -308,10 +300,7 @@ export default async function EventDetailPage({ params }: Params) {
               {practical.map((entry) => {
                 const Icon = entry.icon;
                 return (
-                  <div
-                    key={entry.label}
-                    className="panel flex gap-3 p-4"
-                  >
+                  <div key={entry.label} className="panel flex gap-3 p-4">
                     <Icon
                       className="mt-0.5 size-4 shrink-0 text-[var(--color-holo-cyan)]"
                       aria-hidden="true"
@@ -364,7 +353,7 @@ export default async function EventDetailPage({ params }: Params) {
             />
             <ul className="grid gap-4 sm:grid-cols-2">
               {vendors.map((vendor) => (
-                <li key={vendor.id} className="h-full">
+                <li key={vendor.id} className="h-full min-w-0">
                   <VendorCard vendor={vendor} />
                 </li>
               ))}

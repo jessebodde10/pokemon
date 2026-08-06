@@ -1,11 +1,19 @@
 import type { Metadata } from 'next';
-import Link from 'next/link';
+import { BackLink } from '@/components/events/back-link';
 import { notFound } from 'next/navigation';
 import { Crown, ExternalLink, Facebook, Instagram } from 'lucide-react';
 import { EventCard } from '@/components/events/event-card';
-import { FavoriteButton, FollowButton } from '@/components/events/event-actions';
+import {
+  FavoriteButton,
+  FollowButton,
+} from '@/components/events/event-actions';
 import { RatingDisplay, VendorMark } from '@/components/events/event-visuals';
-import { Badge, EmptyState, Panel, SectionHeading } from '@/components/ui/primitives';
+import {
+  Badge,
+  EmptyState,
+  Panel,
+  SectionHeading,
+} from '@/components/ui/primitives';
 import { getEventsRepository } from '@/features/events/repository';
 
 type Params = { params: Promise<{ vendorId: string }> };
@@ -52,14 +60,7 @@ export default async function VendorPage({ params }: Params) {
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6 sm:py-12">
-      <nav aria-label="Kruimelpad" className="mb-5 text-sm">
-        <Link
-          href="/vendors"
-          className="text-[var(--text-muted)] hover:text-[var(--text-primary)]"
-        >
-          ← Alle standhouders
-        </Link>
-      </nav>
+      <BackLink href="/vendors">Alle standhouders</BackLink>
 
       <header>
         {/* Banner drawn from the vendor's own accent, so a profile is
@@ -135,13 +136,13 @@ export default async function VendorPage({ params }: Params) {
             </div>
 
             {vendor.website || vendor.instagram || vendor.facebook ? (
-              <div className="mt-4 flex flex-wrap gap-3 border-t border-[var(--border-subtle)] pt-4 text-sm">
+              <div className="mt-4 -ml-2 flex flex-wrap gap-1 border-t border-[var(--border-subtle)] pt-4 text-sm">
                 {vendor.website ? (
                   <a
                     href={vendor.website}
                     target="_blank"
                     rel="noopener noreferrer nofollow"
-                    className="inline-flex items-center gap-1.5 text-[var(--color-holo-cyan)] hover:underline"
+                    className="inline-flex min-h-11 items-center gap-1.5 rounded-lg px-2 text-[var(--color-holo-cyan)] transition-colors hover:bg-white/[0.06] hover:underline"
                   >
                     <ExternalLink className="size-4" aria-hidden="true" />
                     Website
@@ -152,7 +153,7 @@ export default async function VendorPage({ params }: Params) {
                     href={`https://instagram.com/${vendor.instagram}`}
                     target="_blank"
                     rel="noopener noreferrer nofollow"
-                    className="inline-flex items-center gap-1.5 text-[var(--color-holo-cyan)] hover:underline"
+                    className="inline-flex min-h-11 items-center gap-1.5 rounded-lg px-2 text-[var(--color-holo-cyan)] transition-colors hover:bg-white/[0.06] hover:underline"
                   >
                     <Instagram className="size-4" aria-hidden="true" />
                     Instagram
@@ -163,7 +164,7 @@ export default async function VendorPage({ params }: Params) {
                     href={`https://facebook.com/${vendor.facebook}`}
                     target="_blank"
                     rel="noopener noreferrer nofollow"
-                    className="inline-flex items-center gap-1.5 text-[var(--color-holo-cyan)] hover:underline"
+                    className="inline-flex min-h-11 items-center gap-1.5 rounded-lg px-2 text-[var(--color-holo-cyan)] transition-colors hover:bg-white/[0.06] hover:underline"
                   >
                     <Facebook className="size-4" aria-hidden="true" />
                     Facebook
@@ -189,7 +190,10 @@ export default async function VendorPage({ params }: Params) {
             <ul className="grid gap-4 sm:grid-cols-2">
               {upcoming.map((item, index) => (
                 <li key={item.event.id} className="h-full">
-                  <EventCard item={{ ...item, distanceKm: null }} index={index} />
+                  <EventCard
+                    item={{ ...item, distanceKm: null }}
+                    index={index}
+                  />
                 </li>
               ))}
             </ul>

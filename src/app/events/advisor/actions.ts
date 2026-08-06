@@ -22,9 +22,12 @@ const requestSchema = z.object({
   originId: z.string().max(40).nullable(),
   maxDistanceKm: z
     .number()
-    .refine((value) => (DISTANCE_OPTIONS as readonly number[]).includes(value), {
-      message: 'Onbekende afstand',
-    })
+    .refine(
+      (value) => (DISTANCE_OPTIONS as readonly number[]).includes(value),
+      {
+        message: 'Onbekende afstand',
+      },
+    )
     .nullable(),
 });
 

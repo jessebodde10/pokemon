@@ -5,7 +5,13 @@ import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { Search, SlidersHorizontal, X } from 'lucide-react';
 import { EventCard } from './event-card';
 import { Button } from '@/components/ui/button';
-import { Badge, EmptyState, Input, Label, Select } from '@/components/ui/primitives';
+import {
+  Badge,
+  EmptyState,
+  Input,
+  Label,
+  Select,
+} from '@/components/ui/primitives';
 import { ORIGIN_CITIES } from '@/features/events/distance';
 import {
   DATE_RANGE_LABELS,
@@ -136,7 +142,10 @@ export function EventsExplorer({
                       id="filter-country"
                       value={filters.country}
                       onChange={(event) => {
-                        update('country', event.target.value as Country | 'all');
+                        update(
+                          'country',
+                          event.target.value as Country | 'all',
+                        );
                         update('province', 'all');
                       }}
                     >
@@ -176,13 +185,13 @@ export function EventsExplorer({
                         update('dateRange', event.target.value as DateRange)
                       }
                     >
-                      {(
-                        Object.keys(DATE_RANGE_LABELS) as DateRange[]
-                      ).map((range) => (
-                        <option key={range} value={range}>
-                          {DATE_RANGE_LABELS[range]}
-                        </option>
-                      ))}
+                      {(Object.keys(DATE_RANGE_LABELS) as DateRange[]).map(
+                        (range) => (
+                          <option key={range} value={range}>
+                            {DATE_RANGE_LABELS[range]}
+                          </option>
+                        ),
+                      )}
                     </Select>
                   </div>
 
@@ -231,7 +240,9 @@ export function EventsExplorer({
                       onChange={(event) =>
                         update(
                           'maxDistanceKm',
-                          event.target.value ? Number(event.target.value) : null,
+                          event.target.value
+                            ? Number(event.target.value)
+                            : null,
                         )
                       }
                       disabled={!filters.originId}

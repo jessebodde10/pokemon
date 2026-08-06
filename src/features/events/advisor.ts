@@ -78,7 +78,11 @@ const INTEREST_SIGNALS: Record<
   budget: { categories: [], tags: [], types: [] },
   japans: { categories: ['cat-japans'], tags: ['japans'], types: [] },
   psa: { categories: ['cat-graded'], tags: ['psa'], types: [] },
-  singles: { categories: ['cat-modern', 'cat-vintage'], tags: ['singles'], types: [] },
+  singles: {
+    categories: ['cat-modern', 'cat-vintage'],
+    tags: ['singles'],
+    types: [],
+  },
 };
 
 const VENDOR_MATCH_WEIGHT = 3;
@@ -152,7 +156,9 @@ function scoreEvent(
       } else if (cheapest.length > 0 && Math.min(...cheapest) <= 9) {
         score += TAG_MATCH_WEIGHT;
         reasons.push({
-          label: `Toegang vanaf €${Math.min(...cheapest).toFixed(2).replace('.', ',')}`,
+          label: `Toegang vanaf €${Math.min(...cheapest)
+            .toFixed(2)
+            .replace('.', ',')}`,
           weight: TAG_MATCH_WEIGHT,
         });
       }
@@ -254,7 +260,8 @@ export class RuleBasedEventAdvisor implements EventAdvisor {
     const recommendations = [...pool]
       .sort(
         (a, b) =>
-          b.score - a.score || a.item.event.date.localeCompare(b.item.event.date),
+          b.score - a.score ||
+          a.item.event.date.localeCompare(b.item.event.date),
       )
       .slice(0, MAX_RECOMMENDATIONS);
 

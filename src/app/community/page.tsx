@@ -7,7 +7,7 @@ import { Badge, Panel, SectionHeading } from '@/components/ui/primitives';
 export const metadata: Metadata = {
   title: 'Community',
   description:
-    'De community rond Pokora AI: ruilen, beursverslagen en verzamelaars in Nederland en België. In voorbereiding.',
+    'De community rond Pokora: ruilen, beursverslagen en verzamelaars in Nederland en België. In voorbereiding.',
   alternates: { canonical: '/community' },
   // Nothing to index yet; announcing an empty section helps nobody.
   robots: { index: false, follow: true },

@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import Link from 'next/link';
+import { BackLink } from '@/components/events/back-link';
 import { EventsDashboard } from '@/components/events/dashboard-view';
 import { getEventsRepository } from '@/features/events/repository';
 
@@ -23,14 +23,7 @@ export default async function EventsDashboardPage() {
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 sm:py-14">
-      <nav aria-label="Kruimelpad" className="mb-5 text-sm">
-        <Link
-          href="/events"
-          className="text-[var(--text-muted)] hover:text-[var(--text-primary)]"
-        >
-          ← Alle evenementen
-        </Link>
-      </nav>
+      <BackLink href="/events">Alle evenementen</BackLink>
 
       <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
         Mijn events

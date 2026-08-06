@@ -6,7 +6,10 @@ import { Star } from 'lucide-react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Badge, Input, Label, Panel } from '@/components/ui/primitives';
-import { addLocalReview, listLocalReviews } from '@/features/events/client-store';
+import {
+  addLocalReview,
+  listLocalReviews,
+} from '@/features/events/client-store';
 import { summariseReviews } from '@/features/events/reviews';
 import {
   REVIEW_TAGS,

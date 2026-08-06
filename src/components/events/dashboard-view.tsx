@@ -80,9 +80,7 @@ export function EventsDashboard({
           title="Meldingen"
           description="Updates over wat je volgt."
           action={
-            unread > 0 ? (
-              <Badge tone="accent">{unread} nieuw</Badge>
-            ) : undefined
+            unread > 0 ? <Badge tone="accent">{unread} nieuw</Badge> : undefined
           }
         />
         <ul className="space-y-2">
@@ -225,7 +223,7 @@ export function EventsDashboard({
                         <li key={item.event.id}>
                           <Link
                             href={`/events/${item.event.slug}`}
-                            className="inline-flex items-center gap-1.5 rounded-full border border-[var(--border-subtle)] px-3 py-1.5 text-xs hover:border-white/30"
+                            className="inline-flex min-h-11 items-center gap-1.5 rounded-full border border-[var(--border-subtle)] px-3 text-xs transition-colors hover:border-white/30"
                           >
                             <CalendarClock
                               className="size-3.5 text-[var(--color-holo-cyan)]"

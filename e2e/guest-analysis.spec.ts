@@ -20,7 +20,7 @@ test('a guest can analyse a binder page and read the report', async ({
     }),
   ).toBeVisible();
   await expect(
-    page.getByText('Pokora AI is geen professionele taxateur of gradingdienst'),
+    page.getByText('Pokora is geen professionele taxateur of gradingdienst'),
   ).toBeVisible();
 
   // 2. Start the analysis

@@ -119,8 +119,7 @@ export class InMemoryEventsRepository implements EventsRepository {
   private bannerFor(event: EventRecord): EventImage | null {
     return (
       eventImages.find(
-        (image) =>
-          event.imageIds.includes(image.id) && image.role === 'banner',
+        (image) => event.imageIds.includes(image.id) && image.role === 'banner',
       ) ?? null
     );
   }
@@ -180,7 +179,8 @@ export class InMemoryEventsRepository implements EventsRepository {
 
   async listVendors(): Promise<Vendor[]> {
     return [...vendors].sort(
-      (a, b) => Number(b.premium) - Number(a.premium) || a.name.localeCompare(b.name),
+      (a, b) =>
+        Number(b.premium) - Number(a.premium) || a.name.localeCompare(b.name),
     );
   }
 

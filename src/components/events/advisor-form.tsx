@@ -75,8 +75,8 @@ export function AdvisorForm({
                     onClick={() => toggle(interest)}
                     className={
                       active
-                        ? 'rounded-full border border-[var(--color-holo-cyan)] bg-[color-mix(in_oklab,var(--color-holo-cyan)_18%,transparent)] px-4 py-2 text-sm font-medium text-[var(--color-holo-cyan)]'
-                        : 'rounded-full border border-[var(--border-subtle)] px-4 py-2 text-sm font-medium text-[var(--text-muted)] hover:border-white/30 hover:text-[var(--text-primary)]'
+                        ? 'min-h-11 rounded-full border border-[var(--color-holo-cyan)] bg-[color-mix(in_oklab,var(--color-holo-cyan)_18%,transparent)] px-4 text-sm font-medium text-[var(--color-holo-cyan)]'
+                        : 'min-h-11 rounded-full border border-[var(--border-subtle)] px-4 text-sm font-medium text-[var(--text-muted)] hover:border-white/30 hover:text-[var(--text-primary)]'
                     }
                   >
                     {ADVISOR_INTEREST_LABELS[interest]}
@@ -176,9 +176,7 @@ export function AdvisorForm({
                     <Panel className="flex flex-col">
                       <div className="flex items-center gap-2">
                         <Badge tone="accent">#{index + 1}</Badge>
-                        <h3 className="font-semibold">
-                          Waarom deze beurs
-                        </h3>
+                        <h3 className="font-semibold">Waarom deze beurs</h3>
                       </div>
                       {entry.reasons.length === 0 ? (
                         <p className="mt-3 text-sm text-[var(--text-muted)]">

@@ -121,10 +121,12 @@ export function filterEvents(
   const origin = findOrigin(filters.originId);
 
   return items
-    .map((item): RankedEvent => ({
-      ...item,
-      distanceKm: origin ? distanceKm(origin, item.venue.coordinates) : null,
-    }))
+    .map(
+      (item): RankedEvent => ({
+        ...item,
+        distanceKm: origin ? distanceKm(origin, item.venue.coordinates) : null,
+      }),
+    )
     .filter((item) => {
       if (!matchesQuery(item, filters.query)) return false;
       if (filters.country !== 'all' && item.venue.country !== filters.country) {

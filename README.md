@@ -1,9 +1,9 @@
-# Pokora AI
+# Pokora
 
 Upload foto's van je Pokémon-kaarten en ontvang een transparante collectieanalyse
 met kaartnamen, geschatte marktwaarden en opvallende kaarten.
 
-> Waarden en conditie-inschattingen zijn indicatief. Pokora AI is geen
+> Waarden en conditie-inschattingen zijn indicatief. Pokora is geen
 > professionele taxateur of gradingdienst.
 
 ---
@@ -423,6 +423,6 @@ respectieve rechthebbenden.
 
 ---
 
-Pokora AI is niet verbonden aan, en wordt niet gesteund door, de uitgevers of
+Pokora is niet verbonden aan, en wordt niet gesteund door, de uitgevers of
 rechthebbenden van de Pokémon-kaarten. Kaart- en setnamen worden uitsluitend
 beschrijvend gebruikt.

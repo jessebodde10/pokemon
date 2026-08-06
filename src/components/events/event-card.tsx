@@ -26,7 +26,13 @@ import type { RankedEvent } from '@/features/events/filtering';
  * when, where, how far, how many vendors, how it was rated, whether they can
  * still get in and what it costs.
  */
-export function EventCard({ item, index = 0 }: { item: RankedEvent; index?: number }) {
+export function EventCard({
+  item,
+  index = 0,
+}: {
+  item: RankedEvent;
+  index?: number;
+}) {
   const reduceMotion = useReducedMotion();
   const distance = formatDistance(item.distanceKm);
   const isFree = item.ticketStatus === 'free';

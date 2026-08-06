@@ -5,7 +5,7 @@ import { getCurrentUser } from '@/features/auth/session';
 import { cn } from '@/lib/utils';
 
 export const LEGAL_DISCLAIMER =
-  'Pokora AI geeft indicatieve informatie op basis van herkenningstechnologie en beschikbare marktdata. Werkelijke verkoopprijzen kunnen afwijken. Pokora AI is geen professionele taxatie-, grading- of beleggingsdienst.';
+  'Pokora geeft indicatieve informatie op basis van herkenningstechnologie en beschikbare marktdata. Werkelijke verkoopprijzen kunnen afwijken. Pokora is geen professionele taxatie-, grading- of beleggingsdienst.';
 
 /**
  * The wordmark is one of the three places the holo sheen is allowed to appear.
@@ -28,7 +28,7 @@ export function PokoraLogo({ className }: { className?: string }) {
         />
       </span>
       <span className="font-[family-name:var(--font-display)] text-[17px] font-bold tracking-tight whitespace-nowrap">
-        Pokora<span className="text-[var(--color-ink-500)]"> AI</span>
+        Pokora
       </span>
     </span>
   );
@@ -55,15 +55,24 @@ export async function SiteHeader() {
   return (
     <header className="sticky top-0 z-40 border-b border-[var(--border-subtle)] bg-[color-mix(in_oklab,var(--surface-page)_88%,transparent)] backdrop-blur">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-2 px-4 sm:gap-4 sm:px-6">
-        <Link href="/" className="rounded-md" aria-label="Pokora AI, naar home">
+        {/* The mark is 32px tall; the padding brings the tap target to 44
+            without moving the wordmark off the optical left edge. */}
+        <Link
+          href="/"
+          className="-ml-2 inline-flex min-h-11 items-center rounded-lg px-2"
+          aria-label="Pokora, naar home"
+        >
           <PokoraLogo />
         </Link>
 
         {/* Sections live in the bar from `lg` up. Below that they move to the
             bottom bar, so the header never has to compete for width with the
             account actions on a phone. */}
+        {/* Named differently from the bottom bar on purpose: two navigation
+            landmarks sharing one accessible name is ambiguous to a screen
+            reader, and only one of the two is ever visible anyway. */}
         <nav
-          aria-label="Secties"
+          aria-label="Hoofdnavigatie"
           className="hidden shrink-0 items-center gap-1 lg:flex"
         >
           {PRIMARY_NAV.map((entry) => (
@@ -79,10 +88,7 @@ export async function SiteHeader() {
           ))}
         </nav>
 
-        <nav
-          aria-label="Account"
-          className="flex shrink-0 items-center gap-1"
-        >
+        <nav aria-label="Account" className="flex shrink-0 items-center gap-1">
           {/* Tighter horizontal padding below `sm`: at 375px the full-width
               labels otherwise push the bar 2px past the viewport, and the page
               body must never scroll sideways. The labels themselves stay
@@ -146,38 +152,32 @@ export function SiteFooter() {
               we wel en niet zeker weten.
             </p>
           </div>
+          {/* Each link is its own row with a 44px hit area. As plain text
+              these were 17px tall, which is well under what a thumb can hit
+              reliably - and they are the links someone reaches for when they
+              want to know what this product does not claim. */}
           <nav aria-label="Juridische informatie" className="text-sm">
-            <ul className="flex flex-col gap-2">
-              <li>
-                <Link
-                  href="/disclaimer"
-                  className="text-[var(--text-muted)] hover:text-[var(--text-primary)]"
-                >
-                  Disclaimer
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/privacy"
-                  className="text-[var(--text-muted)] hover:text-[var(--text-primary)]"
-                >
-                  Privacy
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/terms"
-                  className="text-[var(--text-muted)] hover:text-[var(--text-primary)]"
-                >
-                  Voorwaarden
-                </Link>
-              </li>
+            <ul className="-ml-2 flex flex-col">
+              {[
+                { href: '/disclaimer', label: 'Disclaimer' },
+                { href: '/privacy', label: 'Privacy' },
+                { href: '/terms', label: 'Voorwaarden' },
+              ].map((entry) => (
+                <li key={entry.href}>
+                  <Link
+                    href={entry.href}
+                    className="inline-flex min-h-11 items-center rounded-lg px-2 text-[var(--text-muted)] transition-colors hover:bg-white/[0.06] hover:text-[var(--text-primary)]"
+                  >
+                    {entry.label}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </nav>
         </div>
 
         <p className="mt-8 border-t border-[var(--border-subtle)] pt-6 text-xs leading-relaxed text-[var(--color-ink-500)]">
-          {LEGAL_DISCLAIMER} Pokora AI is niet verbonden aan, en wordt niet
+          {LEGAL_DISCLAIMER} Pokora is niet verbonden aan, en wordt niet
           gesteund door, de uitgevers of rechthebbenden van de Pokémon-kaarten.
           Kaartnamen worden uitsluitend beschrijvend gebruikt.
         </p>
@@ -195,7 +195,7 @@ export function DisclaimerNotice({ compact = false }: { compact?: boolean }) {
           : 'rounded-xl border border-[var(--border-subtle)] bg-[var(--color-ink-900)] px-4 py-3 text-sm leading-relaxed text-[var(--text-muted)]'
       }
     >
-      Waarden en conditie-inschattingen zijn indicatief. Pokora AI is geen
+      Waarden en conditie-inschattingen zijn indicatief. Pokora is geen
       professionele taxateur of gradingdienst.
     </p>
   );

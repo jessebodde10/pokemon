@@ -1,4 +1,4 @@
--- Pokora AI - private storage bucket and guest retention
+-- Pokora - private storage bucket and guest retention
 --
 -- The bucket is private: no anonymous or authenticated role gets a storage
 -- policy, so objects are only reachable through signed URLs minted by the

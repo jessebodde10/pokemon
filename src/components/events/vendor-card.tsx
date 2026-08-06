@@ -13,14 +13,17 @@ import type { Vendor } from '@/features/events/types';
  */
 export function VendorCard({ vendor }: { vendor: Vendor }) {
   return (
-    <article className="panel-raised group flex h-full flex-col gap-3 p-4 transition-colors hover:border-white/20">
+    <article className="panel-raised group relative flex h-full flex-col gap-3 p-4 transition-colors hover:border-white/20">
       <div className="flex items-start gap-3">
         <VendorMark initials={vendor.initials} accent={vendor.accent} />
         <div className="min-w-0 flex-1">
+          {/* The link stretches over the whole card, so the tap target is the
+              card rather than the 19px of text. The icon links below sit
+              above it with `relative`, so they stay separately tappable. */}
           <h3 className="leading-snug font-semibold">
             <Link
               href={`/vendors/${vendor.id}`}
-              className="hover:text-[var(--color-holo-cyan)]"
+              className="after:absolute after:inset-0 hover:text-[var(--color-holo-cyan)]"
             >
               {vendor.name}
             </Link>
@@ -47,14 +50,16 @@ export function VendorCard({ vendor }: { vendor: Vendor }) {
 
       <div className="mt-auto flex items-center justify-between gap-3 border-t border-[var(--border-subtle)] pt-3">
         <RatingDisplay rating={vendor.rating} count={vendor.reviewCount} />
-        <div className="flex items-center gap-1">
+        {/* `relative` lifts these above the card-wide link so they remain
+            reachable, and each is a full 44px square. */}
+        <div className="relative -mr-2 flex items-center">
           {vendor.instagram ? (
             <a
               href={`https://instagram.com/${vendor.instagram}`}
               target="_blank"
               rel="noopener noreferrer nofollow"
               aria-label={`${vendor.name} op Instagram`}
-              className="rounded-md p-1.5 text-[var(--text-muted)] hover:bg-white/[0.06] hover:text-[var(--text-primary)]"
+              className="grid size-11 place-items-center rounded-lg text-[var(--text-muted)] transition-colors hover:bg-white/[0.06] hover:text-[var(--text-primary)]"
             >
               <Instagram className="size-4" aria-hidden="true" />
             </a>
@@ -65,7 +70,7 @@ export function VendorCard({ vendor }: { vendor: Vendor }) {
               target="_blank"
               rel="noopener noreferrer nofollow"
               aria-label={`Website van ${vendor.name}`}
-              className="rounded-md p-1.5 text-[var(--text-muted)] hover:bg-white/[0.06] hover:text-[var(--text-primary)]"
+              className="grid size-11 place-items-center rounded-lg text-[var(--text-muted)] transition-colors hover:bg-white/[0.06] hover:text-[var(--text-primary)]"
             >
               <ExternalLink className="size-4" aria-hidden="true" />
             </a>

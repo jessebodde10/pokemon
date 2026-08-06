@@ -31,7 +31,10 @@ const buttonVariants = cva(
           'border border-[color-mix(in_oklab,var(--color-critical)_45%,transparent)] bg-transparent text-[var(--color-critical)] hover:bg-[color-mix(in_oklab,var(--color-critical)_16%,transparent)]',
       },
       size: {
-        sm: 'h-9 px-4',
+        // 40px rather than 36: `sm` carries real actions on a phone, including
+        // the header call to action. A full 44 would force a density change
+        // across every screen in the app.
+        sm: 'h-10 px-4',
         md: 'h-11 px-6',
         lg: 'h-13 px-8 text-base',
         icon: 'h-10 w-10',

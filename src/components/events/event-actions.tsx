@@ -53,7 +53,11 @@ export function FavoriteButton({
     >
       <Heart
         aria-hidden="true"
-        className={active ? 'fill-[var(--color-holo-pink)] text-[var(--color-holo-pink)]' : undefined}
+        className={
+          active
+            ? 'fill-[var(--color-holo-pink)] text-[var(--color-holo-pink)]'
+            : undefined
+        }
       />
       {active ? 'Opgeslagen' : 'Bewaren'}
     </Button>

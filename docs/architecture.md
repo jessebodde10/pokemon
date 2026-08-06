@@ -2,7 +2,7 @@
 
 ## Uitgangspunt
 
-Pokora AI doet één ding: van foto's naar een controleerbaar collectierapport. De
+Pokora doet één ding: van foto's naar een controleerbaar collectierapport. De
 architectuur is daaromheen gebouwd met twee harde regels:
 
 1. **Businesslogica staat nooit in een React-component.** Componenten renderen;

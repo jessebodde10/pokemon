@@ -78,9 +78,9 @@ export interface AdvertisingService {
 /** Buying and selling between collectors. */
 export interface MarketplaceService {
   readonly name: string;
-  listOffers(cardName: string): Promise<
-    Array<{ vendorId: string; priceEur: number; condition: string }>
-  >;
+  listOffers(
+    cardName: string,
+  ): Promise<Array<{ vendorId: string; priceEur: number; condition: string }>>;
   createListing(input: {
     sellerId: string;
     cardName: string;
@@ -117,9 +117,9 @@ export interface PriceAlertService {
     cardName: string;
     belowEur: number;
   }): Promise<{ alertId: string }>;
-  list(userId: string): Promise<
-    Array<{ alertId: string; cardName: string; belowEur: number }>
-  >;
+  list(
+    userId: string,
+  ): Promise<Array<{ alertId: string; cardName: string; belowEur: number }>>;
   cancel(alertId: string): Promise<void>;
 }
 

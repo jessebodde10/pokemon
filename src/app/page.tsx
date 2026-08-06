@@ -72,7 +72,7 @@ const FAQ = [
   {
     question: 'Hoe nauwkeurig is de herkenning?',
     answer:
-      'Dat verschilt per foto. Pokora AI toont bij iedere kaart een herkenningszekerheid en alternatieve matches. Niets wordt definitief opgeslagen voordat jij het hebt bevestigd of gecorrigeerd.',
+      'Dat verschilt per foto. Pokora toont bij iedere kaart een herkenningszekerheid en alternatieve matches. Niets wordt definitief opgeslagen voordat jij het hebt bevestigd of gecorrigeerd.',
   },
   {
     question: 'Krijg ik een exacte waarde van mijn kaarten?',
@@ -80,7 +80,7 @@ const FAQ = [
       'Nee. Je krijgt een geschatte bandbreedte met een lage, midden- en hoge schatting, inclusief de gebruikte prijsbron, de datum van de laatste update en het aantal prijswaarnemingen. Bij te weinig data tonen we geen bedrag.',
   },
   {
-    question: 'Kan Pokora AI de conditie van mijn kaart beoordelen?',
+    question: 'Kan Pokora de conditie van mijn kaart beoordelen?',
     answer:
       'Niet betrouwbaar op basis van een binderfoto. De conditie blijft dan op "onbekend" staan. Voor een inschatting zijn minimaal een scherpe voor- en achterkantfoto bij neutraal licht nodig.',
   },
@@ -248,7 +248,7 @@ export default function LandingPage() {
                         }}
                       >
                         <step.icon
-                          className="size-5 text-[var(--color-holo-cyan)] transition-transform duration-300 group-hover:-rotate-6 group-hover:scale-110"
+                          className="size-5 text-[var(--color-holo-cyan)] transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-6"
                           aria-hidden="true"
                         />
                       </span>

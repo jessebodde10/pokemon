@@ -30,7 +30,10 @@ export function formatLongDate(iso: string): string {
   return dateFormatterWithYear.format(new Date(`${iso}T12:00:00`));
 }
 
-export function formatRelativeDate(iso: string, now: Date = new Date()): string {
+export function formatRelativeDate(
+  iso: string,
+  now: Date = new Date(),
+): string {
   const target = new Date(`${iso}T12:00:00`);
   const startOfToday = new Date(now);
   startOfToday.setHours(0, 0, 0, 0);

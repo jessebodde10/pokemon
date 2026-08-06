@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import Link from 'next/link';
+import { BackLink } from '@/components/events/back-link';
 import { AlertCircle } from 'lucide-react';
 import {
   AdminConsole,
@@ -94,14 +94,7 @@ export default async function AdminPage() {
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6 sm:py-14">
-      <nav aria-label="Kruimelpad" className="mb-5 text-sm">
-        <Link
-          href="/events"
-          className="text-[var(--text-muted)] hover:text-[var(--text-primary)]"
-        >
-          ← Alle evenementen
-        </Link>
-      </nav>
+      <BackLink href="/events">Alle evenementen</BackLink>
 
       <div className="flex flex-wrap items-center gap-3">
         <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">

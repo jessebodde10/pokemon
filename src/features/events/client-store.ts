@@ -24,7 +24,9 @@ function readSet(key: string): Set<StoredKey> {
     if (!raw) return new Set();
     const parsed: unknown = JSON.parse(raw);
     if (!Array.isArray(parsed)) return new Set();
-    return new Set(parsed.filter((entry): entry is StoredKey => typeof entry === 'string'));
+    return new Set(
+      parsed.filter((entry): entry is StoredKey => typeof entry === 'string'),
+    );
   } catch {
     // Corrupt or unavailable storage must never break the page.
     return new Set();
@@ -108,7 +110,9 @@ export function addLocalReview(review: LocalReview): void {
   if (typeof window === 'undefined') return;
   try {
     const raw = window.localStorage.getItem(REVIEWS_KEY);
-    const existing: LocalReview[] = raw ? (JSON.parse(raw) as LocalReview[]) : [];
+    const existing: LocalReview[] = raw
+      ? (JSON.parse(raw) as LocalReview[])
+      : [];
     window.localStorage.setItem(
       REVIEWS_KEY,
       JSON.stringify([review, ...existing].slice(0, 100)),

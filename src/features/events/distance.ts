@@ -37,18 +37,66 @@ export const ORIGIN_CITIES: ReadonlyArray<{
   label: string;
   coordinates: Coordinates;
 }> = [
-  { id: 'amsterdam', label: 'Amsterdam', coordinates: { latitude: 52.3676, longitude: 4.9041 } },
-  { id: 'rotterdam', label: 'Rotterdam', coordinates: { latitude: 51.9244, longitude: 4.4777 } },
-  { id: 'den-haag', label: 'Den Haag', coordinates: { latitude: 52.0705, longitude: 4.3007 } },
-  { id: 'utrecht', label: 'Utrecht', coordinates: { latitude: 52.0907, longitude: 5.1214 } },
-  { id: 'eindhoven', label: 'Eindhoven', coordinates: { latitude: 51.4416, longitude: 5.4697 } },
-  { id: 'groningen', label: 'Groningen', coordinates: { latitude: 53.2194, longitude: 6.5665 } },
-  { id: 'zwolle', label: 'Zwolle', coordinates: { latitude: 52.5168, longitude: 6.0830 } },
-  { id: 'maastricht', label: 'Maastricht', coordinates: { latitude: 50.8514, longitude: 5.6910 } },
-  { id: 'antwerpen', label: 'Antwerpen', coordinates: { latitude: 51.2194, longitude: 4.4025 } },
-  { id: 'gent', label: 'Gent', coordinates: { latitude: 51.0543, longitude: 3.7174 } },
-  { id: 'brussel', label: 'Brussel', coordinates: { latitude: 50.8503, longitude: 4.3517 } },
-  { id: 'brugge', label: 'Brugge', coordinates: { latitude: 51.2093, longitude: 3.2247 } },
+  {
+    id: 'amsterdam',
+    label: 'Amsterdam',
+    coordinates: { latitude: 52.3676, longitude: 4.9041 },
+  },
+  {
+    id: 'rotterdam',
+    label: 'Rotterdam',
+    coordinates: { latitude: 51.9244, longitude: 4.4777 },
+  },
+  {
+    id: 'den-haag',
+    label: 'Den Haag',
+    coordinates: { latitude: 52.0705, longitude: 4.3007 },
+  },
+  {
+    id: 'utrecht',
+    label: 'Utrecht',
+    coordinates: { latitude: 52.0907, longitude: 5.1214 },
+  },
+  {
+    id: 'eindhoven',
+    label: 'Eindhoven',
+    coordinates: { latitude: 51.4416, longitude: 5.4697 },
+  },
+  {
+    id: 'groningen',
+    label: 'Groningen',
+    coordinates: { latitude: 53.2194, longitude: 6.5665 },
+  },
+  {
+    id: 'zwolle',
+    label: 'Zwolle',
+    coordinates: { latitude: 52.5168, longitude: 6.083 },
+  },
+  {
+    id: 'maastricht',
+    label: 'Maastricht',
+    coordinates: { latitude: 50.8514, longitude: 5.691 },
+  },
+  {
+    id: 'antwerpen',
+    label: 'Antwerpen',
+    coordinates: { latitude: 51.2194, longitude: 4.4025 },
+  },
+  {
+    id: 'gent',
+    label: 'Gent',
+    coordinates: { latitude: 51.0543, longitude: 3.7174 },
+  },
+  {
+    id: 'brussel',
+    label: 'Brussel',
+    coordinates: { latitude: 50.8503, longitude: 4.3517 },
+  },
+  {
+    id: 'brugge',
+    label: 'Brugge',
+    coordinates: { latitude: 51.2093, longitude: 3.2247 },
+  },
 ];
 
 export function findOrigin(id: string | null): Coordinates | null {

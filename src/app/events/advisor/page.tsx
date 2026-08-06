@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { BackLink } from '@/components/events/back-link';
 import Link from 'next/link';
 import { adviseAction } from './actions';
 import { AdvisorForm } from '@/components/events/advisor-form';
@@ -22,14 +23,7 @@ export const metadata: Metadata = {
 export default function AdvisorPage() {
   return (
     <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6 sm:py-14">
-      <nav aria-label="Kruimelpad" className="mb-5 text-sm">
-        <Link
-          href="/events"
-          className="text-[var(--text-muted)] hover:text-[var(--text-primary)]"
-        >
-          ← Alle evenementen
-        </Link>
-      </nav>
+      <BackLink href="/events">Alle evenementen</BackLink>
 
       <p className="label-mono text-[var(--color-holo-cyan)]">Beursadvies</p>
       <h1 className="mt-3 max-w-3xl text-3xl font-bold tracking-tight text-balance sm:text-4xl lg:text-5xl">

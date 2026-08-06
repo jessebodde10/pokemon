@@ -54,7 +54,11 @@ export function Reveal({
       initial={reduceMotion ? false : 'hidden'}
       whileInView="visible"
       viewport={VIEWPORT}
-      transition={{ duration: 0.5, delay: reduceMotion ? 0 : delay, ease: EASE }}
+      transition={{
+        duration: 0.5,
+        delay: reduceMotion ? 0 : delay,
+        ease: EASE,
+      }}
     >
       {children}
     </Component>

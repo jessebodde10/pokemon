@@ -50,7 +50,10 @@ describe('filterEvents', () => {
   it('ignores diacritics and case in the query', async () => {
     const events = await allEvents();
     const plain = filterEvents(events, { ...EMPTY_FILTERS, query: 'Belgie' });
-    const accented = filterEvents(events, { ...EMPTY_FILTERS, query: 'BELGIË' });
+    const accented = filterEvents(events, {
+      ...EMPTY_FILTERS,
+      query: 'BELGIË',
+    });
     expect(plain.map((e) => e.event.id)).toEqual(
       accented.map((e) => e.event.id),
     );
@@ -70,7 +73,9 @@ describe('filterEvents', () => {
       ...EMPTY_FILTERS,
       type: 'one-piece',
     });
-    expect(result.every((entry) => entry.event.type === 'one-piece')).toBe(true);
+    expect(result.every((entry) => entry.event.type === 'one-piece')).toBe(
+      true,
+    );
   });
 
   it('requires every selected tag, not any of them', async () => {
@@ -131,9 +136,9 @@ describe('filterEvents', () => {
     });
     const horizon = new Date(now);
     horizon.setMonth(horizon.getMonth() + 3);
-    expect(
-      result.every((entry) => new Date(entry.event.date) <= horizon),
-    ).toBe(true);
+    expect(result.every((entry) => new Date(entry.event.date) <= horizon)).toBe(
+      true,
+    );
     expect(result.length).toBeLessThan(events.length);
   });
 });
@@ -150,9 +155,7 @@ describe('countActiveFilters', () => {
   });
 
   it('does not count a distance limit that cannot be applied', () => {
-    expect(
-      countActiveFilters({ ...EMPTY_FILTERS, maxDistanceKm: 50 }),
-    ).toBe(0);
+    expect(countActiveFilters({ ...EMPTY_FILTERS, maxDistanceKm: 50 })).toBe(0);
     expect(
       countActiveFilters({
         ...EMPTY_FILTERS,

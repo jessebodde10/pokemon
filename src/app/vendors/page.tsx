@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import Link from 'next/link';
+import { BackLink } from '@/components/events/back-link';
 import { VendorCard } from '@/components/events/vendor-card';
 import { Panel, SectionHeading } from '@/components/ui/primitives';
 import { getEventsRepository } from '@/features/events/repository';
@@ -20,14 +20,7 @@ export default async function VendorsPage() {
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 sm:py-14">
-      <nav aria-label="Kruimelpad" className="mb-5 text-sm">
-        <Link
-          href="/events"
-          className="text-[var(--text-muted)] hover:text-[var(--text-primary)]"
-        >
-          ← Alle evenementen
-        </Link>
-      </nav>
+      <BackLink href="/events">Alle evenementen</BackLink>
 
       <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
         Standhouders
@@ -45,7 +38,7 @@ export default async function VendorsPage() {
         />
         <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {vendors.map((vendor) => (
-            <li key={vendor.id} className="h-full">
+            <li key={vendor.id} className="h-full min-w-0">
               <VendorCard vendor={vendor} />
             </li>
           ))}

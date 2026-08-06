@@ -69,7 +69,9 @@ export function generateEventSummary(detail: EventDetail): EventSummary {
       `Er ${vendors.length === 1 ? 'is' : 'zijn'} ${plural(vendors.length, 'standhouder', 'standhouders')} aangemeld. Hun specialisaties lopen uiteen, dus dit is eerder een brede beurs dan een gerichte.`,
     );
   }
-  basedOn.push(plural(vendors.length, 'standhoudersprofiel', 'standhoudersprofielen'));
+  basedOn.push(
+    plural(vendors.length, 'standhoudersprofiel', 'standhoudersprofielen'),
+  );
 
   if (graded >= 1) {
     paragraphs.push(
@@ -92,7 +94,8 @@ export function generateEventSummary(detail: EventDetail): EventSummary {
     if (agreed.includes('veel-vintage')) {
       phrases.push('het vintage-aanbod valt bezoekers op');
     }
-    if (agreed.includes('veel-slabs')) phrases.push('er zijn veel slabs te zien');
+    if (agreed.includes('veel-slabs'))
+      phrases.push('er zijn veel slabs te zien');
     if (agreed.includes('veel-kinderen')) {
       phrases.push('er komen relatief veel kinderen');
     }
