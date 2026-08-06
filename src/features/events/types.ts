@@ -106,13 +106,19 @@ export type Venue = {
   city: string;
   province: string;
   country: Country;
-  coordinates: Coordinates;
+  /**
+   * Null when nobody has established them. Everything below is the same: a
+   * listing compiled from an organiser's announcement usually states the hall
+   * and the times and nothing else, and the platform would rather show a gap
+   * than a plausible-looking guess about someone else's venue.
+   */
+  coordinates: Coordinates | null;
   /** Free-form, shown under "praktische informatie". */
-  parking: string;
-  publicTransport: string;
-  food: string;
-  toilets: string;
-  wheelchairAccessible: boolean;
+  parking: string | null;
+  publicTransport: string | null;
+  food: string | null;
+  toilets: string | null;
+  wheelchairAccessible: boolean | null;
   /** Built from the address rather than stored, but cached here for clarity. */
   mapsQuery: string;
 };
@@ -161,7 +167,8 @@ export type TicketStatus =
   | 'available'
   | 'limited'
   | 'sold-out'
-  | 'at-the-door';
+  | 'at-the-door'
+  | 'unknown';
 
 export const TICKET_STATUS_LABELS: Record<TicketStatus, string> = {
   free: 'Gratis entree',
@@ -169,6 +176,10 @@ export const TICKET_STATUS_LABELS: Record<TicketStatus, string> = {
   limited: 'Beperkt beschikbaar',
   'sold-out': 'Uitverkocht',
   'at-the-door': 'Alleen aan de deur',
+  // Distinct from "at-the-door": that is a statement about how tickets are
+  // sold, and claiming it for an announcement that simply says nothing about
+  // tickets would be inventing a fact.
+  unknown: 'Ticketinfo onbekend',
 };
 
 /** tickets */

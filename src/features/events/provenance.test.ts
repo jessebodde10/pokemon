@@ -42,9 +42,9 @@ describe('verificationState', () => {
   });
 
   it('treats a listing nobody checked as unverified', () => {
-    expect(
-      verificationState(provenance({ lastVerifiedAt: null }), NOW),
-    ).toBe('unverified');
+    expect(verificationState(provenance({ lastVerifiedAt: null }), NOW)).toBe(
+      'unverified',
+    );
   });
 
   it('does not let an unparseable date pass as checked', () => {
@@ -60,23 +60,51 @@ describe('verificationState', () => {
 });
 
 /**
- * The seeded catalogue is invented. If an entry ever loses its marker it would
- * silently pass as a real event, which is the one outcome this whole mechanism
- * exists to prevent.
+ * The catalogue now mixes invented entries with ones compiled by hand from an
+ * organiser's announcement. The rules that keep the two apart are the whole
+ * point of the provenance record, so they are asserted rather than trusted.
  */
-describe('seeded catalogue', () => {
-  it('marks every shipped event as demo data', () => {
-    const notDemo = events.filter(
-      (event) => event.provenance.kind !== 'demo',
-    );
-    expect(notDemo.map((event) => event.slug)).toEqual([]);
+describe('catalogue provenance', () => {
+  const demo = events.filter((event) => event.provenance.kind === 'demo');
+  const real = events.filter((event) => event.provenance.kind !== 'demo');
+
+  it('ships both invented and compiled entries', () => {
+    expect(demo.length).toBeGreaterThan(0);
+    expect(real.length).toBeGreaterThan(0);
   });
 
   it('claims no source for invented entries', () => {
-    for (const event of events) {
+    for (const event of demo) {
       expect(event.provenance.sourceName).toBeNull();
       expect(event.provenance.sourceUrl).toBeNull();
       expect(event.provenance.lastVerifiedAt).toBeNull();
+    }
+  });
+
+  it('gives every compiled entry a reachable source and a check date', () => {
+    for (const event of real) {
+      expect(event.provenance.sourceName).toBeTruthy();
+      expect(event.provenance.sourceUrl).toMatch(/^https:\/\//);
+      expect(event.provenance.lastVerifiedAt).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+    }
+  });
+
+  it('does not date a check in the future', () => {
+    const today = new Date().toISOString().slice(0, 10);
+    for (const event of real) {
+      expect(event.provenance.lastVerifiedAt! <= today).toBe(true);
+    }
+  });
+
+  /**
+   * An empty vendor list means "the announcement did not say", and the UI has
+   * to be able to tell that apart from a fair with genuinely no vendors. The
+   * guard here is that a compiled entry never invents one.
+   */
+  it('invents no vendors, reviews or visitor counts for compiled entries', () => {
+    for (const event of real) {
+      expect(event.vendorIds).toEqual([]);
+      expect(event.expectedVisitors).toBeNull();
     }
   });
 });

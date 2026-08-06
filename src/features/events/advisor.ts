@@ -1,4 +1,5 @@
 import { distanceKm, findOrigin } from './distance';
+import { headlineTicketStatus } from './repository';
 import { summariseReviews } from './reviews';
 import type { EventDetail, EventListItem } from './types';
 
@@ -217,9 +218,10 @@ export class RuleBasedEventAdvisor implements EventAdvisor {
     }
 
     const scored = catalogue.map((detail) => {
-      const distance = origin
-        ? distanceKm(origin, detail.venue.coordinates)
-        : null;
+      const distance =
+        origin && detail.venue.coordinates
+          ? distanceKm(origin, detail.venue.coordinates)
+          : null;
       const { score, reasons } = scoreEvent(detail, request, distance);
       const reviewSummary = summariseReviews(detail.reviews);
 
@@ -230,9 +232,10 @@ export class RuleBasedEventAdvisor implements EventAdvisor {
         vendorCount: detail.vendors.length,
         reviewCount: reviewSummary.count,
         averageRating: reviewSummary.averageRating,
-        ticketStatus: detail.tickets.some((ticket) => ticket.status === 'free')
-          ? 'free'
-          : (detail.tickets[0]?.status ?? 'at-the-door'),
+        // The shared rule, not a second copy of it. The old fallback claimed
+        // "alleen aan de deur" for an event whose announcement says nothing
+        // about tickets at all.
+        ticketStatus: headlineTicketStatus(detail.tickets),
         fromPriceEur:
           detail.tickets
             .map((ticket) => ticket.priceEur)
@@ -243,12 +246,26 @@ export class RuleBasedEventAdvisor implements EventAdvisor {
       return { item, score, reasons, distanceKm: distance };
     });
 
+    // An unknown distance is not "close enough". Letting a null through would
+    // present a fair whose location nobody established as if it satisfied the
+    // radius the visitor asked for.
     const withinRange = scored.filter(
       (entry) =>
         request.maxDistanceKm === null ||
-        entry.distanceKm === null ||
-        entry.distanceKm <= request.maxDistanceKm,
+        (entry.distanceKm !== null &&
+          entry.distanceKm <= request.maxDistanceKm),
     );
+
+    if (request.maxDistanceKm !== null) {
+      const unlocated = scored.filter((entry) => entry.distanceKm === null);
+      if (unlocated.length > 0) {
+        caveats.push(
+          unlocated.length === 1
+            ? 'Van één beurs is de locatie niet nauwkeurig genoeg bekend om de afstand te berekenen; die is niet meegewogen.'
+            : `Van ${unlocated.length} beurzen is de locatie niet nauwkeurig genoeg bekend om de afstand te berekenen; die zijn niet meegewogen.`,
+        );
+      }
+    }
 
     if (withinRange.length === 0 && scored.length > 0) {
       caveats.push(

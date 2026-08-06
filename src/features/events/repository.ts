@@ -66,7 +66,7 @@ export interface EventsRepository {
 export function headlineTicketStatus(
   eventTickets: readonly Ticket[],
 ): TicketStatus {
-  if (eventTickets.length === 0) return 'at-the-door';
+  if (eventTickets.length === 0) return 'unknown';
   if (eventTickets.some((ticket) => ticket.status === 'free')) return 'free';
   if (eventTickets.some((ticket) => ticket.status === 'available')) {
     return 'available';

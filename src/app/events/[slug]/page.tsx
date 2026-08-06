@@ -113,11 +113,17 @@ function eventJsonLd(detail: EventDetail) {
         addressRegion: venue.province,
         addressCountry: venue.country,
       },
-      geo: {
-        '@type': 'GeoCoordinates',
-        latitude: venue.coordinates.latitude,
-        longitude: venue.coordinates.longitude,
-      },
+      // Omitted entirely when unknown. Emitting a guessed coordinate would
+      // be a claim, not a gap.
+      ...(venue.coordinates
+        ? {
+            geo: {
+              '@type': 'GeoCoordinates',
+              latitude: venue.coordinates.latitude,
+              longitude: venue.coordinates.longitude,
+            },
+          }
+        : {}),
     },
     organizer: {
       '@type': 'Organization',
@@ -153,6 +159,10 @@ export default async function EventDetailPage({ params }: Params) {
   const status = headlineTicketStatus(tickets);
   const summary = generateEventSummary(detail);
 
+  // Only what is actually known. A listing compiled from an organiser's
+  // announcement usually states the hall and the times and nothing else, and an
+  // empty row saying "onbekend" is more useful than an invented reassurance
+  // about parking or accessibility.
   const practical = [
     { icon: Clock, label: 'Openingstijden', value: event.openingTimes },
     { icon: ParkingCircle, label: 'Parkeren', value: venue.parking },
@@ -162,11 +172,19 @@ export default async function EventDetailPage({ params }: Params) {
     {
       icon: Accessibility,
       label: 'Rolstoeltoegankelijk',
-      value: venue.wheelchairAccessible
-        ? 'Ja, de hal is rolstoeltoegankelijk.'
-        : 'Niet volledig toegankelijk. Neem contact op met de organisator.',
+      value:
+        venue.wheelchairAccessible === null
+          ? null
+          : venue.wheelchairAccessible
+            ? 'Ja, de hal is rolstoeltoegankelijk.'
+            : 'Niet volledig toegankelijk. Neem contact op met de organisator.',
     },
-  ] as const;
+  ].filter(
+    (entry): entry is { icon: typeof Clock; label: string; value: string } =>
+      entry.value !== null && entry.value !== '',
+  );
+
+  const unknownPractical = 6 - practical.length;
 
   return (
     <>
@@ -242,7 +260,11 @@ export default async function EventDetailPage({ params }: Params) {
                   rel="noopener noreferrer nofollow"
                 >
                   <TicketIcon aria-hidden="true" />
-                  {status === 'sold-out' ? 'Naar de website' : 'Tickets'}
+                  {/* Only promises tickets when the source actually
+                      mentions them. */}
+                  {status === 'sold-out' || status === 'unknown'
+                    ? 'Naar de website'
+                    : 'Tickets'}
                 </a>
               </Button>
             ) : null}
@@ -320,6 +342,15 @@ export default async function EventDetailPage({ params }: Params) {
                 );
               })}
             </dl>
+            {unknownPractical > 0 ? (
+              <p className="mt-3 text-xs text-[var(--color-ink-500)]">
+                De organisator vermeldt niets over{' '}
+                {unknownPractical === 1
+                  ? 'één van de overige punten'
+                  : `${unknownPractical} van de overige punten`}
+                . Vraag het na als het voor jouw bezoek uitmaakt.
+              </p>
+            ) : null}
           </section>
 
           <section aria-labelledby="tickets-heading">

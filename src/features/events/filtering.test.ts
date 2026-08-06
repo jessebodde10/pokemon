@@ -95,12 +95,31 @@ describe('filterEvents', () => {
     ).toBe(true);
   });
 
-  it('resolves a distance once an origin is chosen', async () => {
+  it('resolves a distance for every venue whose location is known', async () => {
     const result = filterEvents(await allEvents(), {
       ...EMPTY_FILTERS,
       originId: 'utrecht',
     });
-    expect(result.every((entry) => entry.distanceKm !== null)).toBe(true);
+    const located = result.filter((entry) => entry.venue.coordinates !== null);
+    expect(located.length).toBeGreaterThan(0);
+    expect(located.every((entry) => entry.distanceKm !== null)).toBe(true);
+  });
+
+  /**
+   * Entries compiled from an organiser's announcement usually have no
+   * coordinates. Inventing one would put a fair at a distance nobody measured,
+   * so the distance stays null and the caller decides what to say about it.
+   */
+  it('leaves distance null for a venue with no known location', async () => {
+    const result = filterEvents(await allEvents(), {
+      ...EMPTY_FILTERS,
+      originId: 'utrecht',
+    });
+    const unlocated = result.filter(
+      (entry) => entry.venue.coordinates === null,
+    );
+    expect(unlocated.length).toBeGreaterThan(0);
+    expect(unlocated.every((entry) => entry.distanceKm === null)).toBe(true);
   });
 
   it('leaves distance null without an origin', async () => {

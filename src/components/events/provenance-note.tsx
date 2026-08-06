@@ -1,4 +1,9 @@
-import { AlertTriangle, BadgeCheck, CircleHelp, FlaskConical } from 'lucide-react';
+import {
+  AlertTriangle,
+  BadgeCheck,
+  CircleHelp,
+  FlaskConical,
+} from 'lucide-react';
 import { Badge } from '@/components/ui/primitives';
 import { formatLongDate } from '@/features/events/format';
 import {
@@ -103,7 +108,11 @@ export function ProvenanceNote({
       }}
     >
       <p className="flex items-center gap-2 text-sm font-semibold">
-        <Icon className="size-4 shrink-0" style={{ color: border }} aria-hidden="true" />
+        <Icon
+          className="size-4 shrink-0"
+          style={{ color: border }}
+          aria-hidden="true"
+        />
         {label}
       </p>
       <p className="mt-1.5 text-sm leading-relaxed text-[var(--text-muted)]">

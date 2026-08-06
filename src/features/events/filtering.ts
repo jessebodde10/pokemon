@@ -124,7 +124,12 @@ export function filterEvents(
     .map(
       (item): RankedEvent => ({
         ...item,
-        distanceKm: origin ? distanceKm(origin, item.venue.coordinates) : null,
+        // Null when either end is unknown. A listing whose venue has no
+        // coordinates keeps a null distance rather than a fabricated one.
+        distanceKm:
+          origin && item.venue.coordinates
+            ? distanceKm(origin, item.venue.coordinates)
+            : null,
       }),
     )
     .filter((item) => {

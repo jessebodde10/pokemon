@@ -118,6 +118,59 @@ export const venues: Venue[] = [
     wheelchairAccessible: true,
     mapsQuery: 'Maasboulevard 300, 3011 TW Rotterdam',
   },
+
+  // --- Real venues -------------------------------------------------------
+  // Address and city come from the organiser's own announcement. Everything
+  // the announcement does not state stays null; see EVENT provenance below.
+  {
+    id: 'venue-schouwburg-venray',
+    name: 'Schouwburg Venray',
+    addressLine: 'Schouwburgplein 1',
+    postalCode: '5801 BV',
+    city: 'Venray',
+    province: 'Limburg',
+    country: 'NL',
+    coordinates: null,
+    parking:
+      'Deels gratis; voor een deel van de plaatsen moet mogelijk betaald worden.',
+    publicTransport: null,
+    food: null,
+    toilets: null,
+    wheelchairAccessible: null,
+    mapsQuery: 'Schouwburgplein 1, 5801 BV Venray',
+  },
+  {
+    id: 'venue-van-nelle-fabriek',
+    name: 'Van Nelle Fabriek',
+    addressLine: 'Van Nelleweg 1',
+    postalCode: '3044 BC',
+    city: 'Rotterdam',
+    province: 'Zuid-Holland',
+    country: 'NL',
+    coordinates: null,
+    parking: null,
+    publicTransport: null,
+    food: null,
+    toilets: null,
+    wheelchairAccessible: null,
+    mapsQuery: 'Van Nelleweg 1, 3044 BC Rotterdam',
+  },
+  {
+    id: 'venue-hart-van-holland',
+    name: 'Hart van Holland',
+    addressLine: 'Berencamperweg 12',
+    postalCode: '3861 MC',
+    city: 'Nijkerk',
+    province: 'Gelderland',
+    country: 'NL',
+    coordinates: null,
+    parking: 'Gratis parkeren, inbegrepen bij elk ticket.',
+    publicTransport: null,
+    food: null,
+    toilets: null,
+    wheelchairAccessible: null,
+    mapsQuery: 'Berencamperweg 12, 3861 MC Nijkerk',
+  },
 ];
 
 export const organizers: Organizer[] = [
@@ -156,6 +209,35 @@ export const organizers: Organizer[] = [
     website: 'https://example.com/retrolab',
     instagram: 'retrolabfairs',
     email: 'team@example.com',
+  },
+
+  // --- Real organisers ---------------------------------------------------
+  {
+    id: 'org-tcg-beurs-venray',
+    name: 'TCG Beurs Venray',
+    description:
+      'Organiseert de Pokémon Beurs in Schouwburg Venray, met ruim vijftig tafels.',
+    website: 'https://tcg-beurs.nl/',
+    instagram: null,
+    email: null,
+  },
+  {
+    id: 'org-tcg-master-expo',
+    name: 'TCG Master Expo',
+    description:
+      'Organiseert de TCG Master Expo XXL, een grote TCG-beurs met enkele honderden tafels.',
+    website: 'https://www.tcgmasterexpo.nl/',
+    instagram: null,
+    email: null,
+  },
+  {
+    id: 'org-global-card-show',
+    name: 'Global Card Show',
+    description:
+      'Samenwerking van Global Grading/Global CardShop en TCG Fanz & Collectibles.',
+    website: 'https://globalcardshow.nl/',
+    instagram: null,
+    email: null,
   },
 ];
 
@@ -700,6 +782,96 @@ export const events: EventRecord[] = [
     expectedVisitors: 1100,
     provenance: DEMO_PROVENANCE,
   },
+
+  // --- Real events -------------------------------------------------------
+  // Compiled by hand from each organiser's own announcement on the date in
+  // `lastVerifiedAt`. Only facts stated on that page are recorded here.
+  // Vendor line-ups, review counts and visitor numbers are left empty because
+  // the announcements do not state them - not because they are zero.
+  {
+    id: 'event-venray-pokemon-beurs',
+    slug: 'pokemon-beurs-venray',
+    name: 'Pokémon Beurs Venray',
+    summary: 'Pokémon-beurs in Schouwburg Venray met ruim vijftig tafels.',
+    description:
+      'De organisator meldt 50+ tafels. Er zijn drie toegangsmomenten: VIP vanaf 09:30, regulier vanaf 11:30 en een middagticket vanaf 14:00. Kinderen tot 5 jaar hebben gratis toegang. Verdere details over de invulling van de beurs staan niet in de aankondiging.',
+    type: 'pokemon',
+    date: '2026-10-17',
+    endDate: null,
+    openingTimes:
+      'VIP 09:30 – 16:00, regulier 11:30 – 16:00, middag 14:00 – 16:00',
+    venueId: 'venue-schouwburg-venray',
+    organizerId: 'org-tcg-beurs-venray',
+    vendorIds: [],
+    tags: [],
+    ticketIds: [
+      'ticket-venray-vip',
+      'ticket-venray-regulier',
+      'ticket-venray-middag',
+    ],
+    imageIds: ['image-venray-banner'],
+    website: 'https://tcg-beurs.nl/',
+    expectedVisitors: null,
+    provenance: {
+      kind: 'organiser',
+      sourceName: 'tcg-beurs.nl',
+      sourceUrl: 'https://tcg-beurs.nl/',
+      lastVerifiedAt: '2026-08-06',
+    },
+  },
+  {
+    id: 'event-global-card-show-nijkerk',
+    slug: 'global-card-show-nijkerk',
+    name: 'Global Card Show',
+    summary: 'Tweedaagse TCG-beurs in Nijkerk met meer dan honderd stands.',
+    description:
+      'De organisator meldt meer dan 100 stands. Er zijn drie toegangsmomenten per dag: VIP vanaf 10:00, regulier vanaf 11:00 en een middagticket vanaf 13:00. Kinderen tot 12 jaar hebben gratis toegang en parkeren is gratis. De beurs is een samenwerking van Global Grading/Global CardShop en TCG Fanz & Collectibles.',
+    type: 'multi-tcg',
+    date: '2026-10-24',
+    endDate: '2026-10-25',
+    openingTimes:
+      'VIP 10:00 – 16:00, regulier 11:00 – 16:00, middag 13:00 – 16:00',
+    venueId: 'venue-hart-van-holland',
+    organizerId: 'org-global-card-show',
+    vendorIds: [],
+    tags: ['gratis-parkeren'],
+    ticketIds: ['ticket-gcs-vip', 'ticket-gcs-regulier', 'ticket-gcs-middag'],
+    imageIds: ['image-gcs-banner'],
+    website: 'https://globalcardshow.nl/',
+    expectedVisitors: null,
+    provenance: {
+      kind: 'organiser',
+      sourceName: 'globalcardshow.nl',
+      sourceUrl: 'https://globalcardshow.nl/',
+      lastVerifiedAt: '2026-08-06',
+    },
+  },
+  {
+    id: 'event-tcg-master-expo-rotterdam',
+    slug: 'tcg-master-expo-xxl-rotterdam',
+    name: 'TCG Master Expo XXL — Rotterdam',
+    summary: 'Tweedaagse TCG-beurs in de Van Nelle Fabriek met 320+ tafels.',
+    description:
+      'Halloween-editie van de TCG Master Expo XXL. De organisator meldt 320+ tafels en openingstijden van 10:00 tot 17:00. Over ticketprijzen en parkeren staat niets in de aankondiging.',
+    type: 'multi-tcg',
+    date: '2026-10-31',
+    endDate: '2026-11-01',
+    openingTimes: '10:00 – 17:00',
+    venueId: 'venue-van-nelle-fabriek',
+    organizerId: 'org-tcg-master-expo',
+    vendorIds: [],
+    tags: [],
+    ticketIds: [],
+    imageIds: ['image-tme-rotterdam-banner'],
+    website: 'https://www.tcgmasterexpo.nl/',
+    expectedVisitors: null,
+    provenance: {
+      kind: 'organiser',
+      sourceName: 'tcgmasterexpo.nl',
+      sourceUrl: 'https://www.tcgmasterexpo.nl/',
+      lastVerifiedAt: '2026-08-06',
+    },
+  },
 ];
 
 export const tickets: Ticket[] = [
@@ -807,6 +979,59 @@ export const tickets: Ticket[] = [
     status: 'available',
     note: 'Inclusief toegang tot de gradinguitleg.',
   },
+
+  // --- Real tickets ------------------------------------------------------
+  // Prices as published by the organiser on the verification date. Where a
+  // page shows a range (online vs. at the door) the lower figure is recorded
+  // and the note says so.
+  {
+    id: 'ticket-venray-vip',
+    eventId: 'event-venray-pokemon-beurs',
+    label: 'VIP (vanaf 09:30)',
+    priceEur: 4.5,
+    status: 'available',
+    note: 'Vanaf €4,50; aan de deur loopt dit op tot €8,00.',
+  },
+  {
+    id: 'ticket-venray-regulier',
+    eventId: 'event-venray-pokemon-beurs',
+    label: 'Regulier (vanaf 11:30)',
+    priceEur: 2.5,
+    status: 'available',
+    note: 'Vanaf €2,50; aan de deur loopt dit op tot €4,50.',
+  },
+  {
+    id: 'ticket-venray-middag',
+    eventId: 'event-venray-pokemon-beurs',
+    label: 'Middag (vanaf 14:00)',
+    priceEur: 2.5,
+    status: 'available',
+    note: 'Kinderen tot 5 jaar gratis.',
+  },
+  {
+    id: 'ticket-gcs-vip',
+    eventId: 'event-global-card-show-nijkerk',
+    label: 'VIP (vanaf 10:00)',
+    priceEur: 12.5,
+    status: 'available',
+    note: 'Per dag.',
+  },
+  {
+    id: 'ticket-gcs-regulier',
+    eventId: 'event-global-card-show-nijkerk',
+    label: 'Regulier (vanaf 11:00)',
+    priceEur: 10,
+    status: 'available',
+    note: 'Per dag.',
+  },
+  {
+    id: 'ticket-gcs-middag',
+    eventId: 'event-global-card-show-nijkerk',
+    label: 'Middag (vanaf 13:00)',
+    priceEur: 7.5,
+    status: 'available',
+    note: 'Per dag. Kinderen tot 12 jaar gratis.',
+  },
 ];
 
 export const eventImages: EventImage[] = [
@@ -879,6 +1104,28 @@ export const eventImages: EventImage[] = [
     role: 'banner',
     alt: 'Sfeerbanner voor Rotterdam Graded Expo',
     gradient: ['#22d3ee', '#7c5cff'],
+  },
+
+  {
+    id: 'image-venray-banner',
+    eventId: 'event-venray-pokemon-beurs',
+    role: 'banner',
+    alt: 'Sfeerbanner voor Pokémon Beurs Venray',
+    gradient: ['#7c5cff', '#ff6fb5'],
+  },
+  {
+    id: 'image-gcs-banner',
+    eventId: 'event-global-card-show-nijkerk',
+    role: 'banner',
+    alt: 'Sfeerbanner voor Global Card Show',
+    gradient: ['#22d3ee', '#a3e635'],
+  },
+  {
+    id: 'image-tme-rotterdam-banner',
+    eventId: 'event-tcg-master-expo-rotterdam',
+    role: 'banner',
+    alt: 'Sfeerbanner voor TCG Master Expo XXL Rotterdam',
+    gradient: ['#ffc53d', '#fb7185'],
   },
 ];
 
