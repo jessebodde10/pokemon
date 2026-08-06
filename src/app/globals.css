@@ -232,6 +232,74 @@
   }
 }
 
+/* Ambient light drifting inside a panel.
+   Deliberately not the sheen: that stays reserved for the wordmark, the
+   primary button and the phone glass. This is slower, softer and never
+   crosses an edge, so a panel breathes rather than flashes. */
+@keyframes aurora-drift {
+  0%,
+  100% {
+    transform: translate3d(-6%, 4%, 0) scale(1);
+    opacity: 0.3;
+  }
+  50% {
+    transform: translate3d(8%, -10%, 0) scale(1.25);
+    opacity: 0.6;
+  }
+}
+
+/* A highlight that visits one grid cell at a time. Each cell runs the same
+   animation with its own delay, so the accent walks the grid in order. */
+@keyframes cell-scan {
+  0% {
+    opacity: 0;
+  }
+  4% {
+    opacity: 1;
+  }
+  16% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* The icon of the cell currently being visited, kept in step with
+   `cell-scan` so the lift and the glow are one event, not two. */
+@keyframes cell-scan-icon {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  4% {
+    transform: scale(1.3);
+  }
+  16% {
+    transform: scale(1);
+  }
+}
+
+/* Light travelling along the connector between the three steps, in the
+   reading direction. The copy promises an order; this shows it. */
+@keyframes flow-line {
+  to {
+    background-position: -200% 0;
+  }
+}
+
+/* Barely-there vertical drift for an icon. Amplitude stays under 4px: any
+   further and it reads as a glitch rather than as life. */
+@keyframes icon-bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+}
+
 @keyframes float-soft {
   0%,
   100% {

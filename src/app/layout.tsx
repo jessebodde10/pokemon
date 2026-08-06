@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import { Toaster } from 'sonner';
 import { publicConfig } from '@/config/public';
 import { SiteFooter, SiteHeader } from '@/components/layout/site-shell';
+import { MobileNav } from '@/components/layout/mobile-nav';
 import { fontVariables } from './fonts';
 import './globals.css';
 
@@ -46,6 +47,7 @@ export default function RootLayout({
           {children}
         </main>
         <SiteFooter />
+        <MobileNav />
         <Toaster
           theme="dark"
           position="bottom-center"

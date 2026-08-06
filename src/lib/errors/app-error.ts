@@ -16,6 +16,8 @@ export type AppErrorCode =
   | 'RATE_LIMITED'
   | 'INVALID_STATE_TRANSITION'
   | 'AUTH_REQUIRED'
+  // A capability whose contract exists but whose implementation does not.
+  | 'NOT_IMPLEMENTED'
   | 'UNKNOWN';
 
 export class AppError extends Error {

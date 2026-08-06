@@ -34,6 +34,21 @@ export function PokoraLogo({ className }: { className?: string }) {
   );
 }
 
+/**
+ * Primary sections.
+ *
+ * "Analyseren" is the app's original card-analysis feature; it keeps its own
+ * name rather than being relabelled after something it does not do.
+ * "Collectie" points at the real collection page rather than a placeholder,
+ * because that feature already exists.
+ */
+export const PRIMARY_NAV = [
+  { href: '/analyze', label: 'Analyseren' },
+  { href: '/events', label: 'Events' },
+  { href: '/community', label: 'Community' },
+  { href: '/dashboard/collection', label: 'Collectie' },
+] as const;
+
 export async function SiteHeader() {
   const user = await getCurrentUser();
 
@@ -44,8 +59,28 @@ export async function SiteHeader() {
           <PokoraLogo />
         </Link>
 
+        {/* Sections live in the bar from `lg` up. Below that they move to the
+            bottom bar, so the header never has to compete for width with the
+            account actions on a phone. */}
         <nav
-          aria-label="Hoofdnavigatie"
+          aria-label="Secties"
+          className="hidden shrink-0 items-center gap-1 lg:flex"
+        >
+          {PRIMARY_NAV.map((entry) => (
+            <Button
+              key={entry.href}
+              asChild
+              variant="ghost"
+              size="sm"
+              className="px-3"
+            >
+              <Link href={entry.href}>{entry.label}</Link>
+            </Button>
+          ))}
+        </nav>
+
+        <nav
+          aria-label="Account"
           className="flex shrink-0 items-center gap-1"
         >
           {/* Tighter horizontal padding below `sm`: at 375px the full-width
@@ -99,7 +134,9 @@ export async function SiteHeader() {
 
 export function SiteFooter() {
   return (
-    <footer className="mt-20 border-t border-[var(--border-subtle)]">
+    // The extra bottom padding clears the fixed mobile section bar; without it
+    // the last footer line sits underneath it.
+    <footer className="mt-20 border-t border-[var(--border-subtle)] pb-14 lg:pb-0">
       <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
         <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
           <div className="max-w-md">
